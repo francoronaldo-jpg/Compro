@@ -309,7 +309,7 @@ footer .wrap{padding-block:18px 8px}
 </style>
 
 <div class="top">
-  <div class="demo" role="note"><div class="wrap"><b>Simulação</b><span>Loja de experiência: nenhum valor é cobrado e nenhum produto é entregue.</span><button class="snd" id="sndBtn" aria-label="Som ligado" title="Ligar ou desligar o som">🔊</button></div></div>
+  <div class="demo" role="note"><div class="wrap"><b>Simulação</b><span>Loja de experiência: nenhum valor é cobrado e nenhum produto é entregue.</span><button class="snd" id="themeBtn" aria-label="Mudar para fundo escuro" title="Fundo claro ou escuro">🌙</button><button class="snd" id="sndBtn" aria-label="Som ligado" title="Ligar ou desligar o som">🔊</button></div></div>
   <div class="head"><div class="wrap">
     <button class="logo" data-go="home" aria-label="Comprô, início">
       <span class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke="#3A2A00" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1.2 11.2a1 1 0 0 1-1 .8H7.2a1 1 0 0 1-1-.8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/><path d="M9.5 13.5c.8 1 1.6 1.5 2.5 1.5s1.7-.5 2.5-1.5"/></svg></span>
@@ -428,7 +428,7 @@ const PAYS=[
 
 const S={view:'home',cat:'all',q:'',cart:load('cm_cart',[]),orders:load('cm_orders',[]),name:load('cm_name',''),addr:load('cm_addr',null),checkout:null,last:null};
 S.addrMode=S.addr?'saved':'skip';
-S.cart=S.cart.filter(c=>P.some(p=>p.id===c.id));
+
 
 const pct=p=>Math.round((1-p.price/p.old)*100);
 const ph=(p,extra='')=>`<div class="ph" style="--h:${p.h}"><span aria-hidden="true">${p.e}</span><img src="${p.img||'img/'+p.id+'.jpg'}" alt="" loading="lazy" decoding="async">${extra}</div>`;
@@ -445,8 +445,29 @@ function persist(){save('cm_cart',S.cart);save('cm_orders',S.orders);syncBadges(
 function renderCats(){
  $('#cats').innerHTML=CATS.map(c=>`<button class="chip" data-cat="${c.id}" aria-pressed="${S.view==='home'&&S.cat===c.id}"><span aria-hidden="true">${c.e}</span>${c.n}</button>`).join('');
 }
-function list(){let l=P;if(S.cat==='alta')l=l.filter(p=>p.hot);else if(S.cat!=='all')l=l.filter(p=>p.cat===S.cat);
- if(S.q){const t=S.q.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();l=l.filter(p=>p.name.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().includes(t))}return l}
+const norm=x=>String(x).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+// produtos gerados na hora para qualquer busca sem resultado (fictícios, guardados no navegador)
+const GEN_MAP=[[/fone|headset|audio|som/,'🎧','eletro'],[/celular|smartphone|iphone|galaxy|telefone/,'📱','eletro'],[/notebook|laptop|computador|pc\b/,'💻','eletro'],[/tv|televis/,'📺','eletro'],[/game|video ?game|console|controle/,'🎮','eletro'],[/camera|câmera/,'📷','eletro'],
+ [/tenis|sapato|bota|sandalia|chinelo/,'👟','moda'],[/camis|blusa|vestido|calca|saia|roupa|jaqueta|casaco|short/,'👕','moda'],[/bolsa|mochila|carteira/,'👜','acess'],[/oculos/,'🕶️','acess'],[/relogio/,'⌚','acess'],[/anel|colar|brinco|joia|pulseira/,'💍','acess'],
+ [/perfume|batom|maquiagem|creme|shampoo|skincare|esmalte|cabelo/,'💄','beleza'],[/fryer|fritadeira|liquidificador|microondas|geladeira|fogao|batedeira|cafeteira/,'🍳','casa'],[/sofa|cadeira|mesa|cama|luminaria|panela|cozinha|casa|toalha|tapete/,'🛋️','casa'],[/cafe|chocolate|cha|vinho|comida|doce|biscoito/,'🍫','mercado'],
+ [/bola|bicicleta|bike|academia|yoga|treino|halter|fitness/,'⚽','esporte'],[/cachorro|gato|pet|racao/,'🐾','pets'],[/brinquedo|boneca|lego|pelucia|carrinho/,'🧸','brinq'],[/livro/,'📚','casa'],[/carro|moto/,'🚗','brinq'],[/planta|flor|jardim/,'🪴','casa']];
+let GEN=load('cm_gen',[]);
+function hashStr(t){let h=2166136261;for(const c of t){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0}
+function cap(t){return t.replace(/\s+/g,' ').trim().replace(/^./,c=>c.toUpperCase())}
+function genFor(q){const t=norm(q).slice(0,40);if(t.length<2)return [];const h=hashStr(t);const m=GEN_MAP.find(([re])=>re.test(t));const e=m?m[1]:'🛍️',cat=m?m[2]:'casa';
+ const base=20+(h%480);const nm=cap(String(q).slice(0,40));
+ const vars=[[nm,1],[nm+' Premium',1.8],['Kit '+nm.toLowerCase()+' completo',2.4],[nm+' compacto',.7]];
+ return vars.map(([n,k],i)=>{const id=900000+((h+i*7919)%90000);const price=Math.round(base*k)+.9;return {id,name:n,cat,price,old:Math.round(price*1.7)+.9,e,h:h%360,rate:4.5+((h>>>i)%5)/10,sold:300+((h>>>(i+3))%9000),tag:'Achado',gen:true,img:'x'}})}
+function addGen(items){items.forEach(p=>{if(!P.some(x=>x.id===p.id)){P.push(p);GEN.push(p)}});GEN=GEN.slice(-60);save('cm_gen',GEN)}
+GEN.forEach(p=>{if(!P.some(x=>x.id===p.id))P.push(p)});
+S.cart=S.cart.filter(c=>P.some(p=>p.id===c.id));
+function list(){let l=P.filter(p=>!p.gen);if(S.cat==='alta')l=l.filter(p=>p.hot);else if(S.cat!=='all')l=l.filter(p=>p.cat===S.cat);
+ if(S.q){const t=norm(S.q),words=t.split(/\s+/).filter(w=>w.length>1);
+  let r=l.filter(p=>norm(p.name).includes(t));
+  if(!r.length&&words.length)r=l.filter(p=>words.every(w=>norm(p.name).includes(w)));
+  if(r.length<2){const g=genFor(S.q);addGen(g);r=r.concat(g.map(x=>byId(x.id)).filter(Boolean))}
+  l=r}
+ return l}
 
 const ADS=[
  {b:'Brisa Café',t:'Torra fresca toda semana',d:'Grãos especiais com 30% off na primeira compra de mentirinha.',c:'mercado',img:'img/40.jpg',k:'a1'},
@@ -478,7 +499,7 @@ function home(){
  }
  const title=S.q?`Resultados para “${esc(S.q)}”`:(S.cat!=='all'?CATS.find(c=>c.id===S.cat).n:'Para você');
  h+=`<section><div class="sec-h"><h2>${title}</h2><small class="num">${items.length} produtos</small></div>`;
- h+=items.length?`<div class="grid">${gridWithAds(items)}</div>`:`<div class="empty"><strong>Nada encontrado</strong>Tente outra palavra, como “fone” ou “vela”.<br><br><button class="btn btn-alt" data-clear>Ver todos os produtos</button></div>`;
+ h+=items.length?`<div class="grid">${gridWithAds(items)}</div>`:`<div class="empty"><strong>Digite pelo menos 2 letras</strong>Busque qualquer coisa, como “fone” ou “vela”.<br><br><button class="btn btn-alt" data-clear>Ver todos os produtos</button></div>`;
  return h+'</section>';
 }
 
@@ -705,6 +726,11 @@ document.addEventListener('click',e=>{
  if(d.enter!==undefined){const v=($('#wname').value||'').trim().slice(0,40);S.name=v;save('cm_name',v||' ');closeLayer();render();return}
 });
 document.addEventListener('error',e=>{const t=e.target;if(t&&t.tagName==='IMG'&&t.closest('.ph'))t.remove()},true);
+let THEME=load('cm_theme','');
+function curDark(){return THEME?THEME==='dark':matchMedia('(prefers-color-scheme: dark)').matches}
+function applyTheme(){if(THEME)document.documentElement.setAttribute('data-theme',THEME);else document.documentElement.removeAttribute('data-theme');const b=$('#themeBtn');if(b){const d=curDark();b.textContent=d?'☀️':'🌙';b.setAttribute('aria-label',d?'Mudar para fundo claro':'Mudar para fundo escuro')}}
+$('#themeBtn').addEventListener('click',()=>{THEME=curDark()?'light':'dark';save('cm_theme',THEME);applyTheme();sfx.tap()});
+applyTheme();
 $('#sndBtn').addEventListener('click',()=>{SND=!SND;save('cm_snd',SND);syncSnd();if(SND)sfx.tap()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#layer').innerHTML)closeLayer()});
 function rerenderAddr(){const p=$('#addrPanel');if(p)p.innerHTML=addrPanel()}
@@ -713,7 +739,7 @@ document.addEventListener('submit',e=>{if(e.target.id!=='addrForm')return;e.prev
  const fd=new FormData(e.target);const a={};AF.forEach(([k])=>a[k]=String(fd.get(k)||'').trim());
  if(['cep','rua','num','bairro','cidade'].some(k=>!a[k])){$('#aerr').hidden=false;return}
  S.addr=a;save('cm_addr',a);S.addrMode='saved';rerenderAddr();toast('Endereço salvo')});
-$('#searchForm').addEventListener('submit',e=>{e.preventDefault();S.q=$('#q').value.trim();if(S.q)track('search',{q:S.q});S.view='home';render();$('#q').blur()});
+$('#searchForm').addEventListener('submit',e=>{e.preventDefault();S.q=$('#q').value.trim();S.cat='all';if(S.q)track('search',{q:S.q});S.view='home';render();$('#q').blur()});
 $('#q').addEventListener('input',e=>{if(!e.target.value){S.q='';if(S.view==='home')render()}});
 
 // boas-vindas
