@@ -422,17 +422,19 @@ const RAW=[
 /* EM-ALTA-INICIO: bloco trocado pela atualização diária.
    updated: data da lista; fontes: onde a lista foi baseada; hot: ids do catálogo fixo que também estão em alta;
    items: [id único, nome, categoria, preço, preço antigo, emoji, matiz, nota, vendidos, caminho da foto] */
-const ALTA={updated:'2026-11-22',fontes:'Shopee e TikTok Shop Brasil (rankings publicados de mai. a nov. de 2026)',hot:[1,9,10,14,19,23],items:[
+const ALTA={updated:'2026-11-23',fontes:'Shopee, TikTok Shop e Mercado Livre Brasil (Black Friday 2026: TV, creatina, celulares e videogames em alta)',hot:[1,9,10,14,19,23],items:[
   [45,'Fone bluetooth TWS com estojo de carga','eletro',89.9,199.9,'🎧',260,4.7,48200,'img/45.jpg'],
   [46,'Creatina monohidratada 300 g','esporte',79.9,139.9,'💪',40,4.9,61500,'img/46.jpg'],
   [47,'Conjunto fitness sem costura','esporte',69.9,129.9,'🏃',330,4.7,23800,'img/47.jpg'],
-  [48,'Bota masculina de couro','moda',189.9,349.9,'🥾',30,4.6,9100,'img/48.jpg'],
   [49,'Kit 2 câmeras de segurança Wi-Fi','eletro',199.9,379.9,'📹',210,4.6,17400,'img/49.jpg'],
   [50,'Drone com câmera 4K dobrável','eletro',549.9,999.9,'🚁',140,4.5,5600,'img/50.jpg'],
   [51,'Robô aspirador inteligente','casa',599.9,1199.9,'🧹',200,4.6,12300,'img/51.jpg'],
   [52,'Liquidificador portátil recarregável','casa',79.9,149.9,'🥤',30,4.7,33900,'img/52.jpg'],
   [53,'Óleo capilar reparador 60 ml','beleza',39.9,79.9,'💧',40,4.8,27600,'img/53.jpg'],
-  [54,'Kit tratamento capilar 3 passos','beleza',89.9,169.9,'🧴',0,4.8,19800,'img/54.jpg']
+  [54,'Kit tratamento capilar 3 passos','beleza',89.9,169.9,'🧴',0,4.8,19800,'img/54.jpg'],
+  [1001,'Smart TV 50 polegadas 4K','eletro',1899.9,3299.9,'📺',210,4.7,15300,'img/alta/1001.jpg'],
+  [1002,'Smartphone 128 GB tela 6,7"','eletro',1299.9,2199.9,'📱',200,4.6,38700,'img/alta/1002.jpg'],
+  [1003,'Console de videogame com controle','eletro',2999.9,4499.9,'🎮',250,4.8,9800,'img/alta/1003.jpg']
 ]};
 /* EM-ALTA-FIM */
 const P=RAW.map((r,i)=>({id:i+1,name:r[0],cat:r[1],price:r[2],old:r[3],e:r[4],h:r[5],rate:r[6],sold:r[7],tag:r[8]}));
