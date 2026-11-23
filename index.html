@@ -1,4 +1,4 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="compro-site" content="1"><meta name="description" content="Comprô: a loja onde você compra à vontade e nada é cobrado."><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-family:system-ui,-apple-system,sans-serif;font-size:14px}img{max-width:100%}[hidden]{display:none!important}</style></head><body><title>Comprô</title>
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="compro-site" content="1"><meta name="description" content="Shop Comprô: a loja onde você compra à vontade e nada é cobrado."><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-family:system-ui,-apple-system,sans-serif;font-size:14px}img{max-width:100%}[hidden]{display:none!important}</style></head><body><title>Shop Comprô</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Inter:wght@400;500;600;700&display=swap">
@@ -57,7 +57,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(-
 .hello{font-size:13px;opacity:.9;white-space:nowrap}
 .desk-only{display:none}
 @media (min-width:760px){.desk-only{display:inline-flex}.hello.desk-only{display:block}body{padding-bottom:24px}}
-@media (max-width:440px){.logo span{font-size:18px}.demo{font-size:11.5px}}
+@media (max-width:440px){.logo span{font-size:15px;line-height:1.05;max-width:4.6em;white-space:normal}.head .wrap{gap:10px}.demo{font-size:11.5px}}
 
 /* chips de categoria */
 .cats{background:var(--surface);border-bottom:1px solid var(--line)}
@@ -68,7 +68,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(-
 
 main{padding-block:16px 8px}
 section{margin-bottom:22px}
-.sec-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px}
+.sec-h{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 12px;margin-bottom:10px}
 .sec-h h2{font-family:var(--f-display);font-weight:800;font-size:20px;margin:0;letter-spacing:-.01em;text-wrap:balance}
 .link{border:0;background:none;color:var(--brand);font-weight:700;font-size:13.5px;padding:0}
 .hot-h{color:var(--fg)!important}
@@ -324,9 +324,9 @@ footer .wrap{padding-block:18px 8px}
 <div class="top">
   <div class="demo" role="note"><div class="wrap"><b>Simulação</b><span>Loja de experiência: nenhum valor é cobrado e nenhum produto é entregue.</span><button class="snd" id="themeBtn" aria-label="Mudar para fundo escuro" title="Fundo claro ou escuro">🌙</button><button class="snd" id="sndBtn" aria-label="Som ligado" title="Ligar ou desligar o som">🔊</button></div></div>
   <div class="head"><div class="wrap">
-    <button class="logo" data-go="home" aria-label="Comprô, início">
+    <button class="logo" data-go="home" aria-label="Shop Comprô, início">
       <span class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke="#3A2A00" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1.2 11.2a1 1 0 0 1-1 .8H7.2a1 1 0 0 1-1-.8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/><path d="M9.5 13.5c.8 1 1.6 1.5 2.5 1.5s1.7-.5 2.5-1.5"/></svg></span>
-      <span>Comprô</span>
+      <span>Shop Comprô</span>
     </button>
     <form class="search" id="searchForm" role="search">
       <input id="q" type="search" placeholder="Buscar fone, vestido, luminária…" aria-label="Buscar produtos" autocomplete="off">
@@ -340,7 +340,7 @@ footer .wrap{padding-block:18px 8px}
 
 <div class="cats" id="catsBar"><div class="wrap" id="cats"></div></div>
 <main class="wrap" id="app"></main>
-<footer><div class="wrap">Comprô é uma loja de experiência. Os produtos, preços e pedidos são fictícios. Nenhum pagamento é processado, nenhum dado de cartão é pedido e nada é enviado.</div></footer>
+<footer><div class="wrap">Shop Comprô é uma loja de experiência. Os produtos, preços e pedidos são fictícios. Nenhum pagamento é processado, nenhum dado de cartão é pedido e nada é enviado.</div></footer>
 
 <nav class="bnav" aria-label="Navegação">
   <button data-go="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/></svg>Início</button>
@@ -442,7 +442,7 @@ const PAYS=[
  {id:'pix',n:'Pix',d:'Aprovação na hora',e:'⚡'},
  {id:'cartao',n:'Cartão de crédito',d:'Até 12x sem juros. Nenhum dado é pedido.',e:'💳'},
  {id:'boleto',n:'Boleto',d:'Pago na hora, sem código',e:'🧾'},
- {id:'saldo',n:'Saldo Comprô',d:'Saldo infinito de mentirinha',e:'🪙'}];
+ {id:'saldo',n:'Saldo Shop Comprô',d:'Saldo infinito de mentirinha',e:'🪙'}];
 
 const S={view:'home',cat:'all',q:'',cart:load('cm_cart',[]),orders:load('cm_orders',[]),name:load('cm_name',''),addr:load('cm_addr',null),checkout:null,last:null};
 S.addrMode=S.addr?'saved':'skip';
@@ -516,7 +516,7 @@ function home(){
  const flash=[...P].sort((a,b)=>pct(b)-pct(a)).slice(0,10);
  let h='';
  if(!filtered){
-  if(bfOn())h+=`<section class="bf" aria-label="Black Friday"><div class="bf-top"><div><small class="bf-k">Black Friday Comprô</small><h2>Até 50% off em produtos selecionados</h2><p>Só até 30/11. Desconto de mentirinha, alegria de verdade.</p></div><div class="bf-clock num" id="bfclock" aria-label="Tempo até o fim da Black Friday"></div></div>
+  if(bfOn())h+=`<section class="bf" aria-label="Black Friday"><div class="bf-top"><div><small class="bf-k">Black Friday Shop Comprô</small><h2>Até 50% off em produtos selecionados</h2><p>Só até 30/11. Desconto de mentirinha, alegria de verdade.</p></div><div class="bf-clock num" id="bfclock" aria-label="Tempo até o fim da Black Friday"></div></div>
    <div class="rail">${P.filter(p=>p.bf).sort((a,b)=>b.bf-a.bf).map(p=>`<button class="mini" data-open="${p.id}" aria-label="${esc(p.name)}">${ph(p,`<b class="off bfoff num">-${p.bf}%</b>`)}<p class="nm bfnm">${esc(p.name)}</p><div class="pr num">${brl(p.price)} <s>${brl(p.old)}</s></div></button>`).join('')}</div>
    <button class="btn bf-cta" data-cat="bf">Ver todas as ofertas</button></section>`;
   h+=`<section class="banners" aria-label="Destaques">
@@ -598,7 +598,7 @@ function addrPanel(){
   <button role="radio" aria-checked="${m!=='skip'}" data-amode="${S.addr?'saved':'form'}">Cadastrar endereço</button>
   <button role="radio" aria-checked="${m==='skip'}" data-amode="skip">Pular esta etapa</button></div>`;
  if(m==='skip')h+=`<div class="addr">${pinIco}<p><strong>Sem endereço</strong><br><small>Tudo bem. Como nada é entregue, o endereço é opcional.</small></p></div>`;
- else if(m==='saved'&&S.addr)h+=`<div class="addr">${pinIco}<p><strong>${esc(S.name||'Cliente Comprô')}</strong><br>${addrText(S.addr)}<br><small>Salvo só neste navegador. Nada será enviado para este endereço.</small></p></div>
+ else if(m==='saved'&&S.addr)h+=`<div class="addr">${pinIco}<p><strong>${esc(S.name||'Cliente Shop Comprô')}</strong><br>${addrText(S.addr)}<br><small>Salvo só neste navegador. Nada será enviado para este endereço.</small></p></div>
   <div class="arow"><button class="btn btn-ghost sm" data-amode="form">Editar</button><button class="btn btn-ghost sm" data-adel>Apagar endereço</button></div>`;
  else{const a=S.addr||{};h+=`<form id="addrForm" class="aform" novalidate>${AF.map(([k,l,ph,half])=>`<label class="${half?'half':''}" for="a_${k}">${l}<input id="a_${k}" name="${k}" value="${esc(a[k]||'')}" placeholder="${ph}" maxlength="80" autocomplete="off"></label>`).join('')}
   <p class="ferr" id="aerr" hidden>Preencha os campos obrigatórios ou escolha pular esta etapa.</p>
@@ -618,7 +618,7 @@ function successView(){
  return `<div class="done">
   <div class="seal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
   <h2>Compra concluída${S.name?', '+esc(S.name.split(' ')[0]):''}!</h2>
-  <p class="lead">Obrigado por comprar no Comprô. Aproveite a sensação boa: foi tudo de mentirinha.</p>
+  <p class="lead">Obrigado por comprar no Shop Comprô. Aproveite a sensação boa: foi tudo de mentirinha.</p>
   <p class="oid num">Pedido <b>#${o.n}</b> · pago com ${o.pay}</p>
   ${o.coins!=null?`<div class="coins"><div class="row1"><span>Você ganhou <b class="big num" id="cn">0</b> moedas Comprô</span><small class="num" style="color:var(--muted)">Saldo: <span id="cbal">${(o.coinsBefore||0).toLocaleString('pt-BR')}</span></small></div><div class="row1"><small id="clvl">Nível: ${LEVELS[lvlOf(o.coinsBefore||0).i]}</small><small class="num" id="cnext"></small></div><div class="lvl"><i id="cbar" style="width:${lvlOf(o.coinsBefore||0).p}%"></i></div></div>`:''}
   <button class="gift" data-gift><span class="bx" aria-hidden="true">🎁</span><span id="giftTxt">Toque para abrir seu presente surpresa</span></button>
@@ -667,7 +667,7 @@ function openProduct(id){
  $('#layer').innerHTML=`<div class="scrim" data-close><div class="sheet" role="dialog" aria-modal="true" aria-label="${esc(p.name)}" style="position:relative">
   <button class="sheet-x" data-close aria-label="Fechar">×</button>${ph(p,`<b class="off num">-${pct(p)}%</b>`)}
   <div class="sb"><div class="pr num">${brl(p.price)}<s>${brl(p.old)}</s></div><h3>${esc(p.name)}</h3>
-  <div class="meta num"><span class="st">★★★★★</span>${p.rate.toLocaleString('pt-BR')} · ${kfmt(p.sold)} vendidos · Loja Comprô Oficial</div>
+  <div class="meta num"><span class="st">★★★★★</span>${p.rate.toLocaleString('pt-BR')} · ${kfmt(p.sold)} vendidos · Loja Shop Comprô Oficial</div>
   ${o?`<div><div class="opt-l">${o.l}</div><div class="opts">${o.v.map((x,i)=>`<button class="opt" data-opt="${x}" aria-pressed="${!i}">${x}</button>`).join('')}</div></div>`:''}
   <div><div class="opt-l">Quantidade</div><span class="qty"><button data-sq="-1" aria-label="Diminuir">−</button><output class="num" id="sq">1</output><button data-sq="1" aria-label="Aumentar">+</button></span></div>
   <div class="sheet-actions"><button class="btn btn-alt" data-add>Adicionar ao carrinho</button><button class="btn btn-main" data-buy>Comprar agora</button></div>
@@ -783,7 +783,7 @@ $('#q').addEventListener('input',e=>{if(!e.target.value){S.q='';if(S.view==='hom
 // boas-vindas
 function welcome(){
  $('#layer').innerHTML=`<div class="scrim center"><div class="welcome" role="dialog" aria-modal="true" aria-labelledby="wt">
-  <h2 id="wt">Boas-vindas ao Comprô</h2>
+  <h2 id="wt">Boas-vindas ao Shop Comprô</h2>
   <p>Uma loja para sentir o prazer de comprar sem gastar nada.</p>
   <ul><li><i>1</i>Navegue, encha o carrinho e escolha à vontade.</li><li><i>2</i>Ao escolher a forma de pagamento, a compra é concluída.</li><li><i>3</i>Nenhum valor é cobrado e nenhum produto é entregue.</li></ul>
   <label for="wname">Como quer ser chamado? <span style="color:var(--muted);font-weight:400">(opcional)</span><input id="wname" maxlength="40" placeholder="Seu nome ou apelido" autocomplete="given-name"></label>
@@ -810,7 +810,7 @@ function startTracking(){
   if(got>claimed){for(let i=claimed;i<got;i++)giveCoupon('INDICOU20-'+rnd(),20,0,'20% por indicar um amigo que veio','indicou');save('cm_refclaimed',got);setTimeout(()=>{toast('🎟️ '+(got-claimed>1?(got-claimed)+' amigos chegaram':'Um amigo chegou')+' pelo seu link! Você ganhou cupom de 20%.');sfx.gift()},2600)}}).catch(()=>{});
 }
 function consentBar(){const d=document.createElement('div');d.className='consent';d.setAttribute('role','dialog');d.setAttribute('aria-label','Aviso de privacidade');
- d.innerHTML=`<p><b>Sua privacidade</b> Com a sua permissão, o Comprô registra dados anônimos de uso: visitas, buscas, compras simuladas e a cidade aproximada da conexão. Não coletamos nome, endereço, e-mail nem dados de cadastro. <a href="/privacidade.html" target="_blank" rel="noopener">Saiba mais</a></p><div class="cbtns"><button class="btn btn-ghost sm" data-consent="no">Recusar</button><button class="btn btn-main sm" data-consent="yes">Aceitar</button></div>`;
+ d.innerHTML=`<p><b>Sua privacidade</b> Com a sua permissão, o Shop Comprô registra dados anônimos de uso: visitas, buscas, compras simuladas e a cidade aproximada da conexão. Não coletamos nome, endereço, e-mail nem dados de cadastro. <a href="/privacidade.html" target="_blank" rel="noopener">Saiba mais</a></p><div class="cbtns"><button class="btn btn-ghost sm" data-consent="no">Recusar</button><button class="btn btn-main sm" data-consent="yes">Aceitar</button></div>`;
  document.body.appendChild(d);d.addEventListener('click',e=>{const b=e.target.closest('[data-consent]');if(!b)return;CONSENT=b.dataset.consent;save('cm_consent',CONSENT);d.remove();if(CONSENT==='yes')startTracking()})}
 if(SITE){if(CONSENT===null)consentBar();else if(CONSENT==='yes')startTracking()}
 if(!load('cm_name',''))welcome();

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
-<title>Painel Comprô</title>
+<title>Painel Shop Comprô</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap">
 <style>
@@ -60,7 +60,7 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'
 const n=v=>Number(v||0).toLocaleString('pt-BR');
 const brl=v=>Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 function loginView(msg){
- app.innerHTML=`<form class="login" id="lf"><h1>Painel Comprô<small>Acesso restrito</small></h1>
+ app.innerHTML=`<form class="login" id="lf"><h1>Painel Shop Comprô<small>Acesso restrito</small></h1>
  <label for="pw" style="font-size:13px;font-weight:600">Senha</label><input id="pw" type="password" autocomplete="current-password" required>
  ${msg?`<p class="err">${esc(msg)}</p>`:''}<button class="btn btn-main" type="submit">Entrar</button></form>`;
  $('#pw').focus();
@@ -80,7 +80,7 @@ function chart(series){
  return `<div class="legend"><span><i style="background:var(--brand)"></i>Acessos</span><span><i style="background:var(--sun)"></i>Visitantes únicos</span><span><i style="background:var(--hot);border-radius:50%"></i>Compras</span></div><div class="chart"><svg viewBox="0 0 ${W} ${H}" width="100%" style="min-width:520px" role="img" aria-label="Acessos dos últimos 14 dias">${g}${bars}</svg></div>`}
 function dash(d){
  const t=d.totals,last=d.series[d.series.length-1]||{};
- app.innerHTML=`<header><h1>Painel Comprô<small>Atualizado ${new Date(d.generatedAt).toLocaleString('pt-BR')} · dados anônimos</small></h1><div style="display:flex;gap:8px"><button class="btn btn-ghost" id="rf">Atualizar</button><button class="btn btn-ghost" id="lo">Sair</button></div></header>
+ app.innerHTML=`<header><h1>Painel Shop Comprô<small>Atualizado ${new Date(d.generatedAt).toLocaleString('pt-BR')} · dados anônimos</small></h1><div style="display:flex;gap:8px"><button class="btn btn-ghost" id="rf">Atualizar</button><button class="btn btn-ghost" id="lo">Sair</button></div></header>
  <section class="kpis">
   <div class="kpi"><small>Acessos hoje</small><b>${n(last.visits)}</b><span>${n(t.visits)} no total</span></div>
   <div class="kpi"><small>Únicos hoje</small><b>${n(last.uniq)}</b><span>${n(t.uniq)} no total</span></div>
@@ -101,7 +101,7 @@ function dash(d){
  <p class="note">Só aparecem visitantes que aceitaram o aviso de privacidade. O painel não guarda nome, endereço, e-mail, IP nem dados de cadastro. A cidade vem da localização aproximada da conexão.</p>`;
  $('#rf').onclick=load;$('#lo').onclick=async()=>{await fetch('/api/login',{method:'DELETE'});loginView()};
 }
-async function load(){try{const r=await fetch('/api/stats');const j=await r.json().catch(()=>({}));if(r.status===401)return loginView();if(!r.ok)return app.innerHTML=`<div class="login"><h1>Painel Comprô</h1><p class="err">${esc(j.error||'Erro ao carregar.')}</p><button class="btn btn-main" onclick="location.reload()">Tentar de novo</button></div>`;dash(j)}catch(e){loginView('Sem conexão com o servidor.')}}
+async function load(){try{const r=await fetch('/api/stats');const j=await r.json().catch(()=>({}));if(r.status===401)return loginView();if(!r.ok)return app.innerHTML=`<div class="login"><h1>Painel Shop Comprô</h1><p class="err">${esc(j.error||'Erro ao carregar.')}</p><button class="btn btn-main" onclick="location.reload()">Tentar de novo</button></div>`;dash(j)}catch(e){loginView('Sem conexão com o servidor.')}}
 load();
 })();
 </script>

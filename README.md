@@ -1,4 +1,4 @@
-# Comprô
+# Shop Comprô
 
 Loja de compras simuladas: a pessoa navega, enche o carrinho e conclui a compra, mas nada é cobrado e nada é entregue.
 
