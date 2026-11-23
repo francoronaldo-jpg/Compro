@@ -285,6 +285,12 @@ footer .wrap{padding-block:18px 8px}
 .welcome ul{margin:0;padding:0;list-style:none;display:grid;gap:8px}
 .welcome li{display:flex;gap:10px;align-items:center;font-size:14px}
 .welcome li i{flex:none;width:24px;height:24px;border-radius:50%;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;font-style:normal;font-weight:800;font-size:13px}
+.wbadge{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;background:var(--sun);color:var(--sun-ink);border-radius:999px;padding:4px 12px 4px 6px;font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+.wbadge span{font-size:16px}
+.welcome li span{flex:1;min-width:0}.welcome li b{color:var(--fg)}
+.wopt{display:flex!important;gap:8px;align-items:center;font-weight:500!important;color:var(--muted)}
+.wopt input{width:auto!important;margin:0!important}
+.wsmall{color:var(--muted);font-size:12px;text-align:center}.wsmall a{color:var(--brand);font-weight:600}
 .welcome label{font-size:13px;font-weight:600}
 .welcome input{width:100%;border:1px solid var(--line);background:var(--surface-2);color:var(--fg);border-radius:10px;padding:11px 12px;font:inherit;margin-top:4px}
 .scrim.center{align-items:center;padding:16px}
@@ -444,8 +450,10 @@ const PAYS=[
  {id:'boleto',n:'Boleto',d:'Pago na hora, sem código',e:'🧾'},
  {id:'saldo',n:'Saldo Shop Comprô',d:'Saldo infinito de mentirinha',e:'🪙'}];
 
-const S={view:'home',cat:'all',q:'',cart:load('cm_cart',[]),orders:load('cm_orders',[]),name:load('cm_name',''),addr:load('cm_addr',null),checkout:null,last:null};
-S.addrMode=S.addr?'saved':'skip';
+// Nenhum dado pessoal é guardado: apaga nome e endereço que versões antigas salvavam no navegador.
+try{localStorage.removeItem('cm_name');localStorage.removeItem('cm_addr');localStorage.removeItem('cm_consent')}catch(e){}
+const S={view:'home',cat:'all',q:'',cart:load('cm_cart',[]),orders:load('cm_orders',[]),name:'',addr:null,checkout:null,last:null};
+S.addrMode='skip';S.orders.forEach(o=>{if(o.addr)o.addr=true});save('cm_orders',S.orders);
 
 
 const pct=p=>Math.round((1-p.price/p.old)*100);
@@ -598,12 +606,12 @@ function addrPanel(){
   <button role="radio" aria-checked="${m!=='skip'}" data-amode="${S.addr?'saved':'form'}">Cadastrar endereço</button>
   <button role="radio" aria-checked="${m==='skip'}" data-amode="skip">Pular esta etapa</button></div>`;
  if(m==='skip')h+=`<div class="addr">${pinIco}<p><strong>Sem endereço</strong><br><small>Tudo bem. Como nada é entregue, o endereço é opcional.</small></p></div>`;
- else if(m==='saved'&&S.addr)h+=`<div class="addr">${pinIco}<p><strong>${esc(S.name||'Cliente Shop Comprô')}</strong><br>${addrText(S.addr)}<br><small>Salvo só neste navegador. Nada será enviado para este endereço.</small></p></div>
+ else if(m==='saved'&&S.addr)h+=`<div class="addr">${pinIco}<p><strong>${esc(S.name||'Cliente Shop Comprô')}</strong><br>${addrText(S.addr)}<br><small>Usado só nesta compra e apagado em seguida. Não é salvo nem enviado.</small></p></div>
   <div class="arow"><button class="btn btn-ghost sm" data-amode="form">Editar</button><button class="btn btn-ghost sm" data-adel>Apagar endereço</button></div>`;
  else{const a=S.addr||{};h+=`<form id="addrForm" class="aform" novalidate>${AF.map(([k,l,ph,half])=>`<label class="${half?'half':''}" for="a_${k}">${l}<input id="a_${k}" name="${k}" value="${esc(a[k]||'')}" placeholder="${ph}" maxlength="80" autocomplete="off"></label>`).join('')}
   <p class="ferr" id="aerr" hidden>Preencha os campos obrigatórios ou escolha pular esta etapa.</p>
   <button class="btn btn-alt" type="submit">Salvar endereço</button>
-  <small class="fhint">Você pode inventar um endereço. Ele fica salvo só neste navegador e nenhum produto será enviado.</small></form>`}
+  <small class="fhint">Você pode inventar um endereço. Ele não é salvo nem enviado, e serve só para esta compra de mentirinha.</small></form>`}
  return h;
 }
 function animateCoins(){const o=S.last;if(!o||o.coins==null||!$('#cn'))return;const b=o.coinsBefore||0,a=b+o.coins;countUp($('#cn'),0,o.coins,1100);countUp($('#cbal'),b,a,1100);sfx.coin();
@@ -642,7 +650,7 @@ function ordersView(){
  ${S.wallet.length?`<div class="panel" style="margin-bottom:12px"><p class="h3">Seus cupons</p><div class="cplist">${S.wallet.map(w=>`<div class="cpchip ${w.used?'used':''}"><b>${w.pct?w.pct+'% OFF':'Frete grátis'}</b><small>${esc(w.code)} · ${esc(w.label)}${w.used?' · usado':''}</small></div>`).join('')}</div></div>`:''}
  <div class="stack">${S.orders.map(o=>`<div class="panel order"><div class="order-h num"><span><b style="color:var(--fg)">#${o.n}</b> · ${new Date(o.d).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'})}</span><span class="pill">${STAGES[stageOf(o)]}</span></div>${trackHtml(o)}
   <div class="thumbs">${o.items.map(c=>ph(byId(c.id)||c.snap||{e:'📦',h:150,id:0,img:'x'})).join('')}</div>
-  <div class="order-h num"><span>${o.items.reduce((a,c)=>a+c.q,0)} itens · ${o.pay} · ${o.addr?'Endereço: '+esc(o.addr.rua)+', '+esc(o.addr.num):'Sem endereço'}</span><span>Total ${brl(o.total)} · <b class="green">cobrado R$ 0,00</b></span></div></div>`).join('')}</div>`;
+  <div class="order-h num"><span>${o.items.reduce((a,c)=>a+c.q,0)} itens · ${o.pay} · ${o.addr?'Com endereço (não salvo)':'Sem endereço'}</span><span>Total ${brl(o.total)} · <b class="green">cobrado R$ 0,00</b></span></div></div>`).join('')}</div>`;
 }
 
 function catsView(){
@@ -713,7 +721,7 @@ function addToCart(id,q,opt){const f=S.cart.find(c=>c.id===id&&c.opt===opt);f?f.
 function complete(payId){
  const m=PAYS.find(x=>x.id===payId);const items=S.checkout.items;const t=totals(items,S.coupon);
  if(S.addrMode==='form'){const e=$('#aerr');if(e){e.hidden=false;e.scrollIntoView({behavior:'smooth',block:'center'})}toast('Salve o endereço ou escolha pular esta etapa');return}
- const o={n:'CP'+Date.now().toString(36).toUpperCase().slice(-6),d:Date.now(),items:items.map(c=>{const p=byId(c.id);return {...c,snap:{name:p.name,e:p.e,h:p.h,img:p.img||'img/'+p.id+'.jpg',id:p.id}}}),total:t.total,pay:m.n,addr:S.addrMode==='saved'&&S.addr?{...S.addr}:null,coupon:t.cp?t.cp.code:null,disc:t.disc};
+ const o={n:'CP'+Date.now().toString(36).toUpperCase().slice(-6),d:Date.now(),items:items.map(c=>{const p=byId(c.id);return {...c,snap:{name:p.name,e:p.e,h:p.h,img:p.img||'img/'+p.id+'.jpg',id:p.id}}}),total:t.total,pay:m.n,addr:!!(S.addrMode==='saved'&&S.addr),coupon:t.cp?t.cp.code:null,disc:t.disc};
  if(t.cp){const w=S.wallet.find(x=>x.code===t.cp.code);if(w){w.used=true;saveWallet()}}S.coupon=null;
  track('purchase',{items:o.items.map(c=>({n:(c.snap&&c.snap.name)||'',q:c.q})),total:o.total});
  o.coins=Math.max(10,Math.round(o.total));o.coinsBefore=COINS;COINS+=o.coins;save('cm_coins',COINS);
@@ -760,8 +768,8 @@ document.addEventListener('click',e=>{
  if(d.refcopy!==undefined){copyRef();return}
  if(d.gift!==undefined&&!t.classList.contains('open')){openGift(t);return}
  if(d.amode){S.addrMode=d.amode;rerenderAddr();if(d.amode==='form'){const i=$('#a_cep');i&&i.focus()}return}
- if(d.adel!==undefined){S.addr=null;try{localStorage.removeItem('cm_addr')}catch(e){}S.addrMode='skip';rerenderAddr();toast('Endereço apagado');return}
- if(d.enter!==undefined){const v=($('#wname').value||'').trim().slice(0,40);S.name=v;save('cm_name',v||' ');closeLayer();render();return}
+ if(d.adel!==undefined){S.addr=null;S.addrMode='skip';rerenderAddr();toast('Endereço apagado');return}
+ if(d.enter!==undefined){const nc=$('#wnocount');CONSENT=nc&&nc.checked?'no':'yes';closeLayer();sfx.tap();if(SITE&&CONSENT==='yes'&&!TRACKED){TRACKED=true;startTracking()}return}
 });
 document.addEventListener('error',e=>{const t=e.target;if(t&&t.tagName==='IMG'&&t.closest('.ph'))t.remove()},true);
 let THEME=load('cm_theme','');
@@ -776,19 +784,28 @@ document.addEventListener('submit',e=>{if(e.target.id==='cpForm'){e.preventDefau
 document.addEventListener('submit',e=>{if(e.target.id!=='addrForm')return;e.preventDefault();
  const fd=new FormData(e.target);const a={};AF.forEach(([k])=>a[k]=String(fd.get(k)||'').trim());
  if(['cep','rua','num','bairro','cidade'].some(k=>!a[k])){$('#aerr').hidden=false;return}
- S.addr=a;save('cm_addr',a);S.addrMode='saved';rerenderAddr();toast('Endereço salvo')});
+ S.addr=a;S.addrMode='saved';rerenderAddr();toast('Endereço salvo')});
 $('#searchForm').addEventListener('submit',e=>{e.preventDefault();S.q=$('#q').value.trim();S.cat='all';if(S.q)track('search',{q:S.q});S.view='home';render();$('#q').blur()});
 $('#q').addEventListener('input',e=>{if(!e.target.value){S.q='';if(S.view==='home')render()}});
 
 // boas-vindas
+let TRACKED=false;
 function welcome(){
- $('#layer').innerHTML=`<div class="scrim center"><div class="welcome" role="dialog" aria-modal="true" aria-labelledby="wt">
+ $('#layer').innerHTML=`<div class="scrim center"><div class="welcome" role="dialog" aria-modal="true" aria-labelledby="wt" aria-describedby="wd">
+  <div class="wbadge"><span>🛍️</span><b>Shopping de simulação</b></div>
   <h2 id="wt">Boas-vindas ao Shop Comprô</h2>
-  <p>Uma loja para sentir o prazer de comprar sem gastar nada.</p>
-  <ul><li><i>1</i>Navegue, encha o carrinho e escolha à vontade.</li><li><i>2</i>Ao escolher a forma de pagamento, a compra é concluída.</li><li><i>3</i>Nenhum valor é cobrado e nenhum produto é entregue.</li></ul>
-  <label for="wname">Como quer ser chamado? <span style="color:var(--muted);font-weight:400">(opcional)</span><input id="wname" maxlength="40" placeholder="Seu nome ou apelido" autocomplete="given-name"></label>
-  <button class="btn btn-main" data-enter>Entrar na experiência</button></div></div>`;
+  <p id="wd">Aqui é tudo uma brincadeira: um shopping de mentirinha para sentir o prazer de comprar sem gastar nada.</p>
+  <ul>
+   <li><i>✓</i><span><b>Nada é cobrado.</b> Não pedimos cartão, Pix, CPF nem senha.</span></li>
+   <li><i>✓</i><span><b>Nada é entregue.</b> Os produtos e os pedidos são fictícios.</span></li>
+   <li><i>✓</i><span><b>Nenhum dado seu é guardado.</b> Não guardamos nome, endereço, e-mail nem telefone.</span></li>
+   ${SITE?'<li><i>✓</i><span><b>Só contamos o tráfego.</b> Visitas, buscas e compras simuladas entram em números gerais e anônimos, com a cidade aproximada.</span></li>':'<li><i>✓</i><span><b>Nada é enviado.</b> Carrinho e pedidos ficam só neste navegador.</span></li>'}
+  </ul>
+  ${SITE?'<label class="wopt" for="wnocount"><input type="checkbox" id="wnocount"> Não contar minha visita</label>':''}
+  <button class="btn btn-main" data-enter>Ciente, quero comprar de mentirinha</button>
+  <small class="wsmall">Ao tocar em "Ciente", você confirma que entendeu que nada será cobrado e nada será entregue.${SITE?' <a href="/privacidade.html" target="_blank" rel="noopener">Privacidade</a>':''}</small></div></div>`;
  document.body.style.overflow='hidden';
+ setTimeout(()=>{const b=$('[data-enter]');b&&b.focus({preventScroll:true})},60);
 }
 S.name=(S.name||'').trim();
 syncSnd();render();
@@ -812,8 +829,7 @@ function startTracking(){
 function consentBar(){const d=document.createElement('div');d.className='consent';d.setAttribute('role','dialog');d.setAttribute('aria-label','Aviso de privacidade');
  d.innerHTML=`<p><b>Sua privacidade</b> Com a sua permissão, o Shop Comprô registra dados anônimos de uso: visitas, buscas, compras simuladas e a cidade aproximada da conexão. Não coletamos nome, endereço, e-mail nem dados de cadastro. <a href="/privacidade.html" target="_blank" rel="noopener">Saiba mais</a></p><div class="cbtns"><button class="btn btn-ghost sm" data-consent="no">Recusar</button><button class="btn btn-main sm" data-consent="yes">Aceitar</button></div>`;
  document.body.appendChild(d);d.addEventListener('click',e=>{const b=e.target.closest('[data-consent]');if(!b)return;CONSENT=b.dataset.consent;save('cm_consent',CONSENT);d.remove();if(CONSENT==='yes')startTracking()})}
-if(SITE){if(CONSENT===null)consentBar();else if(CONSENT==='yes')startTracking()}
-if(!load('cm_name',''))welcome();
+welcome();
 })();
 </script>
 </body></html>
