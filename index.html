@@ -90,6 +90,19 @@ section{margin-bottom:22px}
 .a1{background:#3B2416;color:#F7E7D4}.a2{background:#1E2A4A;color:#E3E9FF}.a3{background:#DDEFD9;color:#1F3A1C}
 .a4{background:#FF7A45;color:#2B1206}.a5{background:#FFE3A3;color:#3A2A00}.a6{background:#F4D4DE;color:#4A1426}
 @media (min-width:900px){.adban{padding-right:30%;min-height:170px}.adban img{width:30%}.adtxt{padding:22px 28px}.adtxt b{font-size:26px}}
+.bf{background:#0E0E10;color:#F5F5F5;border-radius:18px;padding:16px;margin-bottom:22px;display:grid;gap:12px;box-shadow:var(--shadow)}
+.bf-top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-end}
+.bf-k{color:var(--sun);font-weight:800;text-transform:uppercase;letter-spacing:.12em;font-size:11.5px}
+.bf h2{font-family:var(--f-display);font-weight:800;font-size:24px;line-height:1.1;margin:2px 0 4px;max-width:20ch;text-wrap:balance;color:#fff}
+.bf p{margin:0;font-size:13px;color:#C9C9CF}
+.bf-clock{display:flex;gap:6px}
+.bf-clock span{background:#222226;border:1px solid #34343A;border-radius:10px;min-width:52px;padding:6px 6px 5px;text-align:center;font-size:10.5px;color:#B8B8C0;text-transform:uppercase;letter-spacing:.05em}
+.bf-clock b{display:block;font-family:var(--f-display);font-size:22px;color:var(--sun);letter-spacing:0}
+.bf .mini .pr{color:#FF7AA5}.bf .mini .pr s{color:#9A9AA3;font-size:11px;font-weight:400}
+.bfnm{color:#EDEDED;margin-top:6px;font-size:12.5px}
+.bfoff{background:#FF2E63!important;color:#fff!important}
+.tagx.bftag{background:#0E0E10;color:var(--sun)}
+.bf-cta{background:var(--sun);color:var(--sun-ink);justify-self:start}
 .sec-h small{color:var(--muted);font-size:13px}
 
 /* banners */
@@ -350,7 +363,7 @@ function load(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}
 function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
 
 const CATS=[
- {id:'all',n:'Tudo',e:'✨'},{id:'alta',n:'Em alta',e:'🔥'},{id:'moda',n:'Moda',e:'👗'},{id:'beleza',n:'Beleza',e:'💄'},{id:'casa',n:'Casa',e:'🛋️'},
+ {id:'all',n:'Tudo',e:'✨'},...(Date.now()<new Date('2026-11-30T23:59:59-03:00').getTime()?[{id:'bf',n:'Black Friday',e:'🖤'}]:[]),{id:'alta',n:'Em alta',e:'🔥'},{id:'moda',n:'Moda',e:'👗'},{id:'beleza',n:'Beleza',e:'💄'},{id:'casa',n:'Casa',e:'🛋️'},
  {id:'eletro',n:'Eletrônicos',e:'🎧'},{id:'esporte',n:'Esportes',e:'🏃'},{id:'pets',n:'Pets',e:'🐾'},
  {id:'brinq',n:'Brinquedos',e:'🧸'},{id:'mercado',n:'Mercado',e:'🛒'},{id:'acess',n:'Acessórios',e:'🕶️'}];
 // [nome, categoria, preço, preço antigo, emoji, matiz, nota, vendidos, selo]
@@ -419,6 +432,10 @@ const ALTA={updated:'2026-11-22',fontes:'Shopee e TikTok Shop Brasil (rankings p
 const P=RAW.map((r,i)=>({id:i+1,name:r[0],cat:r[1],price:r[2],old:r[3],e:r[4],h:r[5],rate:r[6],sold:r[7],tag:r[8]}));
 ALTA.items.forEach(r=>P.push({id:r[0],name:r[1],cat:r[2],price:r[3],old:r[4],e:r[5],h:r[6],rate:r[7],sold:r[8],tag:'Em alta',img:r[9],hot:true}));
 P.forEach(p=>{if(ALTA.hot.includes(p.id)){p.hot=true;if(!p.tag)p.tag='Em alta'}});
+// BLACK FRIDAY: produtos selecionados com até 50% off até 30/11/2026 23:59 (Brasília). Sai sozinha depois.
+const BF={end:new Date('2026-11-30T23:59:59-03:00').getTime(),items:{18:50,13:50,6:50,34:50,12:45,3:45,51:45,7:40,19:40,42:40,22:35,50:35,24:30,10:30,28:25}};
+const bfOn=()=>Date.now()<BF.end;
+if(bfOn())P.forEach(p=>{const k=BF.items[p.id];if(k){p.bf=k;p.price=Math.round(p.old*(1-k/100)*10)/10-0.01;p.price=Math.round(p.price*100)/100;p.tag='Black Friday'}});
 const byId=id=>P.find(p=>p.id===+id);
 const OPTS={moda:{l:'Tamanho',v:['P','M','G','GG']},beleza:null,casa:{l:'Cor',v:['Areia','Grafite','Branco']},eletro:{l:'Cor',v:['Preto','Branco','Azul']},esporte:{l:'Cor',v:['Verde','Rosa','Preto']},pets:{l:'Tamanho',v:['P','M','G']},brinq:null,mercado:null,acess:{l:'Cor',v:['Preto','Dourado','Prata']}};
 const PAYS=[
@@ -434,7 +451,7 @@ S.addrMode=S.addr?'saved':'skip';
 const pct=p=>Math.round((1-p.price/p.old)*100);
 const ph=(p,extra='')=>`<div class="ph" style="--h:${p.h}"><span aria-hidden="true">${p.e}</span><img src="${p.img||'img/'+p.id+'.jpg'}" alt="" loading="lazy" decoding="async">${extra}</div>`;
 function card(p){return `<button class="card" data-open="${p.id}" aria-label="${esc(p.name)}, ${brl(p.price)}">
- ${ph(p,`<b class="off num">-${pct(p)}%</b>${p.tag?`<i class="tagx">${p.tag}</i>`:''}`)}
+ ${ph(p,`<b class="off num">-${pct(p)}%</b>${p.tag?`<i class="tagx${p.bf?' bftag':''}">${p.tag}</i>`:''}`)}
  <div class="ci"><p class="nm">${esc(p.name)}</p><div class="pr num">${brl(p.price)}</div>
  ${p.price>=49.9?'<span class="free">Frete grátis</span>':''}
  <div class="meta num"><span class="st">★</span>${p.rate.toLocaleString('pt-BR')} · ${kfmt(p.sold)} vendidos</div></div></button>`}
@@ -476,7 +493,7 @@ function genFor(q){const t=norm(q).slice(0,40);if(t.length<2)return [];const h=h
 function addGen(items){items.forEach(p=>{if(!P.some(x=>x.id===p.id)){P.push(p);GEN.push(p)}});GEN=GEN.slice(-60);save('cm_gen',GEN)}
 GEN.forEach(p=>{p.img=photoFor(p.name);if(!P.some(x=>x.id===p.id))P.push(p)});
 S.cart=S.cart.filter(c=>P.some(p=>p.id===c.id));
-function list(){let l=P.filter(p=>!p.gen);if(S.cat==='alta')l=l.filter(p=>p.hot);else if(S.cat!=='all')l=l.filter(p=>p.cat===S.cat);
+function list(){let l=P.filter(p=>!p.gen);if(S.cat==='alta')l=l.filter(p=>p.hot);else if(S.cat==='bf')l=l.filter(p=>p.bf).sort((a,b)=>b.bf-a.bf);else if(S.cat!=='all')l=l.filter(p=>p.cat===S.cat);
  if(S.q){const t=norm(S.q),words=t.split(/\s+/).filter(w=>w.length>1);
   let r=l.filter(p=>norm(p.name).includes(t));
   if(!r.length&&words.length)r=l.filter(p=>words.every(w=>norm(p.name).includes(w)));
@@ -499,6 +516,9 @@ function home(){
  const flash=[...P].sort((a,b)=>pct(b)-pct(a)).slice(0,10);
  let h='';
  if(!filtered){
+  if(bfOn())h+=`<section class="bf" aria-label="Black Friday"><div class="bf-top"><div><small class="bf-k">Black Friday Comprô</small><h2>Até 50% off em produtos selecionados</h2><p>Só até 30/11. Desconto de mentirinha, alegria de verdade.</p></div><div class="bf-clock num" id="bfclock" aria-label="Tempo até o fim da Black Friday"></div></div>
+   <div class="rail">${P.filter(p=>p.bf).sort((a,b)=>b.bf-a.bf).map(p=>`<button class="mini" data-open="${p.id}" aria-label="${esc(p.name)}">${ph(p,`<b class="off bfoff num">-${p.bf}%</b>`)}<p class="nm bfnm">${esc(p.name)}</p><div class="pr num">${brl(p.price)} <s>${brl(p.old)}</s></div></button>`).join('')}</div>
+   <button class="btn bf-cta" data-cat="bf">Ver todas as ofertas</button></section>`;
   h+=`<section class="banners" aria-label="Destaques">
    <div class="ban ban-1"><div><h3>Semana do carrinho leve</h3><p>Compre o que quiser. O total cobrado continua R$ 0,00.</p></div><span class="big" aria-hidden="true">🛍️</span></div>
    <div class="ban ban-2"><div><h3>Até 55% de desconto</h3><p>Ofertas de mentirinha, alegria de verdade.</p></div><span class="big" aria-hidden="true">🏷️</span></div>
@@ -626,7 +646,7 @@ function ordersView(){
 }
 
 function catsView(){
- const used=new Set();return `<div class="sec-h"><h2>Categorias</h2></div><div class="catgrid">${CATS.filter(c=>c.id!=='all').map(c=>{const items=c.id==='alta'?P.filter(p=>p.hot):P.filter(p=>p.cat===c.id);const srt=[...items].sort((a,b)=>b.sold-a.sold);const p=srt.find(x=>!used.has(x.id))||srt[0];used.add(p.id);
+ const used=new Set();return `<div class="sec-h"><h2>Categorias</h2></div><div class="catgrid">${CATS.filter(c=>c.id!=='all').map(c=>{const items=c.id==='alta'?P.filter(p=>p.hot):c.id==='bf'?P.filter(p=>p.bf):P.filter(p=>p.cat===c.id);const srt=[...items].sort((a,b)=>b.sold-a.sold);const p=srt.find(x=>!used.has(x.id))||srt[0];used.add(p.id);
   return `<button class="cattile" data-cat="${c.id}">${ph(p)}<span class="ct"><b>${c.e} ${c.n}</b><small class="num">${items.length} produtos</small></span></button>`}).join('')}</div>`;
 }
 function render(){
@@ -711,7 +731,10 @@ function confetti(){
 }
 
 // relógio da oferta
-function tick(){const el=$('#clock');if(!el)return;const n=new Date();const end=new Date(n);end.setMinutes(59,59,999);let s=Math.max(0,Math.floor((end-n)/1000));
+function bfTick(){const el=$('#bfclock');if(!el)return;let s=Math.max(0,Math.floor((BF.end-Date.now())/1000));if(!s){render();return}const d=Math.floor(s/86400);s%=86400;const p=v=>String(v).padStart(2,'0');
+ el.innerHTML=`<span><b>${d}</b>dias</span><span><b>${p(Math.floor(s/3600))}</b>h</span><span><b>${p(Math.floor(s%3600/60))}</b>min</span><span><b>${p(s%60)}</b>s</span>`}
+setInterval(bfTick,1000);
+function tick(){bfTick();const el=$('#clock');if(!el)return;const n=new Date();const end=new Date(n);end.setMinutes(59,59,999);let s=Math.max(0,Math.floor((end-n)/1000));
  const p=v=>String(v).padStart(2,'0');el.innerHTML=`Acaba em <span>00</span>:<span>${p(Math.floor(s/60))}</span>:<span>${p(s%60)}</span>`}
 setInterval(tick,1000);
 
