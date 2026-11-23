@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Painel Comprô</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+:root{--bg:#EEF3F1;--surface:#fff;--surface-2:#F6F9F8;--fg:#14201D;--muted:#5A6B67;--line:#DCE5E2;--brand:#0B7A6B;--brand-soft:#D7EFEA;--hot:#C92C63;--sun:#FFC83D;--sun-ink:#3A2A00;
+--f-display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;--f-body:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--bg:#0D1412;--surface:#16201E;--surface-2:#1C2826;--fg:#E7EFEC;--muted:#9AABA6;--line:#283632;--brand:#2DB7A2;--brand-soft:#173B35;--hot:#FF6A98;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.45 var(--f-body)}
+.wrap{max-width:1180px;margin:0 auto;padding:20px max(16px,env(safe-area-inset-left,0px)) 40px max(16px,env(safe-area-inset-right,0px))}
+header{display:flex;align-items:center;gap:12px;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap}
+h1{font-family:var(--f-display);font-weight:800;font-size:26px;margin:0;letter-spacing:-.02em}
+h1 small{display:block;font:500 13px var(--f-body);color:var(--muted);letter-spacing:0}
+h2{font-family:var(--f-display);font-size:17px;margin:0 0 10px}
+.btn{border:0;border-radius:10px;padding:10px 16px;font:700 14px var(--f-body);cursor:pointer}
+.btn-main{background:var(--brand);color:#fff}.btn-ghost{background:var(--surface);color:var(--fg);border:1px solid var(--line)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.login{max-width:380px;margin:12vh auto 0;background:var(--surface);border-radius:18px;padding:24px;display:grid;gap:12px;box-shadow:0 6px 24px rgba(0,0,0,.08)}
+.login input{border:1px solid var(--line);background:var(--surface-2);color:var(--fg);border-radius:10px;padding:12px;font:inherit}
+.err{color:var(--hot);font-weight:600;font-size:14px;margin:0}
+.kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:14px}
+@media(min-width:800px){.kpis{grid-template-columns:repeat(6,minmax(0,1fr))}}
+.kpi{background:var(--surface);border-radius:14px;padding:12px 14px}
+.kpi small{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+.kpi b{display:block;font-family:var(--f-display);font-size:26px;font-variant-numeric:tabular-nums}
+.kpi span{font-size:12px;color:var(--muted)}
+.grid{display:grid;gap:14px}
+@media(min-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.card{background:var(--surface);border-radius:16px;padding:16px;min-width:0}
+.chart{overflow-x:auto}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--muted);margin-bottom:6px;flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.rank{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.rank li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;font-size:14px;position:relative;padding:5px 8px;border-radius:8px;overflow:hidden}
+.rank li::before{content:"";position:absolute;inset:0 auto 0 0;width:var(--w);background:var(--brand-soft);z-index:0}
+.rank li>*{position:relative;z-index:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rank b{font-variant-numeric:tabular-nums}
+.empty{color:var(--muted);font-size:14px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+td,th{padding:7px 6px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+th{color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+.tag{display:inline-block;border-radius:999px;padding:1px 8px;font-size:12px;font-weight:700;background:var(--surface-2)}
+.tag.compra{background:#FBE3EC;color:#9B1E4B}.tag.busca{background:#FFF1C7;color:#6B4D00}.tag.visita{background:var(--brand-soft);color:var(--brand)}
+.note{font-size:12.5px;color:var(--muted);margin-top:16px}
+.span2{grid-column:1/-1}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+(function(){
+const $=s=>document.querySelector(s), app=$('#app');
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const n=v=>Number(v||0).toLocaleString('pt-BR');
+const brl=v=>Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+function loginView(msg){
+ app.innerHTML=`<form class="login" id="lf"><h1>Painel Comprô<small>Acesso restrito</small></h1>
+ <label for="pw" style="font-size:13px;font-weight:600">Senha</label><input id="pw" type="password" autocomplete="current-password" required>
+ ${msg?`<p class="err">${esc(msg)}</p>`:''}<button class="btn btn-main" type="submit">Entrar</button></form>`;
+ $('#pw').focus();
+ $('#lf').addEventListener('submit',async e=>{e.preventDefault();const r=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:$('#pw').value})});
+  const j=await r.json().catch(()=>({}));if(r.ok)load();else loginView(j.error||'Não foi possível entrar.')});
+}
+function rank(list,fmt){if(!list.length)return '<p class="empty">Ainda sem dados.</p>';const max=Math.max(...list.map(x=>x.v),1);
+ return `<ol class="rank">${list.map(x=>`<li style="--w:${Math.round(x.v/max*100)}%"><span title="${esc(x.k)}">${esc(x.k)}</span><b>${fmt?fmt(x.v):n(x.v)}</b></li>`).join('')}</ol>`}
+function chart(series){
+ const W=640,H=200,P={l:34,r:8,t:10,b:28},iw=W-P.l-P.r,ih=H-P.t-P.b;const max=Math.max(4,...series.map(s=>s.visits));
+ const step=Math.ceil(max/4);const top=step*4;const bw=iw/series.length;const y=v=>P.t+ih-v/top*ih;
+ let g='';for(let i=0;i<=4;i++){const v=i*step;g+=`<line x1="${P.l}" x2="${W-P.r}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${P.l-6}" y="${y(v)+4}" text-anchor="end" font-size="10" fill="var(--muted)">${v}</text>`}
+ const bars=series.map((s,i)=>{const x=P.l+i*bw;return `<rect x="${x+bw*.12}" y="${y(s.visits)}" width="${bw*.38}" height="${ih-(y(s.visits)-P.t)}" rx="3" fill="var(--brand)"><title>${s.d}: ${s.visits} acessos</title></rect>
+ <rect x="${x+bw*.5}" y="${y(s.uniq)}" width="${bw*.38}" height="${ih-(y(s.uniq)-P.t)}" rx="3" fill="var(--sun)"><title>${s.d}: ${s.uniq} únicos</title></rect>
+ ${s.orders?`<circle cx="${x+bw/2}" cy="${y(s.orders)}" r="3.5" fill="var(--hot)"><title>${s.d}: ${s.orders} compras</title></circle>`:''}
+ ${(series.length-1-i)%2===0||series.length<10?`<text x="${x+bw/2}" y="${H-10}" text-anchor="middle" font-size="10" fill="var(--muted)">${s.d.slice(8)}/${s.d.slice(5,7)}</text>`:''}`}).join('');
+ return `<div class="legend"><span><i style="background:var(--brand)"></i>Acessos</span><span><i style="background:var(--sun)"></i>Visitantes únicos</span><span><i style="background:var(--hot);border-radius:50%"></i>Compras</span></div><div class="chart"><svg viewBox="0 0 ${W} ${H}" width="100%" style="min-width:520px" role="img" aria-label="Acessos dos últimos 14 dias">${g}${bars}</svg></div>`}
+function dash(d){
+ const t=d.totals,last=d.series[d.series.length-1]||{};
+ app.innerHTML=`<header><h1>Painel Comprô<small>Atualizado ${new Date(d.generatedAt).toLocaleString('pt-BR')} · dados anônimos</small></h1><div style="display:flex;gap:8px"><button class="btn btn-ghost" id="rf">Atualizar</button><button class="btn btn-ghost" id="lo">Sair</button></div></header>
+ <section class="kpis">
+  <div class="kpi"><small>Acessos hoje</small><b>${n(last.visits)}</b><span>${n(t.visits)} no total</span></div>
+  <div class="kpi"><small>Únicos hoje</small><b>${n(last.uniq)}</b><span>${n(t.uniq)} no total</span></div>
+  <div class="kpi"><small>Compras hoje</small><b>${n(last.orders)}</b><span>${n(t.orders)} no total</span></div>
+  <div class="kpi"><small>Buscas hoje</small><b>${n(last.searches)}</b><span>últimos 14 dias: ${n(d.series.reduce((a,s)=>a+s.searches,0))}</span></div>
+  <div class="kpi"><small>Valor simulado</small><b style="font-size:20px">${brl(t.revenue)}</b><span>nada foi cobrado</span></div>
+  <div class="kpi"><small>Conversão</small><b>${t.uniq?Math.round(t.orders/t.uniq*100):0}%</b><span>compras por visitante</span></div>
+ </section>
+ <div class="grid">
+  <div class="card span2"><h2>Últimos 14 dias</h2>${chart(d.series)}</div>
+  <div class="card"><h2>Locais de acesso (cidade aproximada)</h2>${rank(d.cities)}</div>
+  <div class="card"><h2>Visitantes únicos por cidade</h2>${rank(d.citiesUniq)}</div>
+  <div class="card"><h2>Produtos mais comprados</h2>${rank(d.products,v=>n(v)+' un.')}</div>
+  <div class="card"><h2>Termos mais pesquisados</h2>${rank(d.searches)}</div>
+  <div class="card"><h2>Indicações que trouxeram visitantes</h2>${rank(d.refs.map(x=>({k:'Código '+x.k,v:x.v})))}</div>
+  <div class="card"><h2>Atividade recente</h2>${d.recent.length?`<div style="overflow-x:auto"><table><tr><th>Quando</th><th>O quê</th><th>Detalhe</th><th>Cidade</th></tr>${d.recent.map(r=>`<tr><td>${new Date(r.t).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'})}</td><td><span class="tag ${esc(r.e)}">${esc(r.e)}</span></td><td>${r.q?esc(r.q):r.v!=null?brl(r.v)+' · '+n(r.n)+' itens':''}</td><td>${esc(r.city||'')}</td></tr>`).join('')}</table></div>`:'<p class="empty">Ainda sem dados.</p>'}</div>
+ </div>
+ <p class="note">Só aparecem visitantes que aceitaram o aviso de privacidade. O painel não guarda nome, endereço, e-mail, IP nem dados de cadastro. A cidade vem da localização aproximada da conexão.</p>`;
+ $('#rf').onclick=load;$('#lo').onclick=async()=>{await fetch('/api/login',{method:'DELETE'});loginView()};
+}
+async function load(){try{const r=await fetch('/api/stats');const j=await r.json().catch(()=>({}));if(r.status===401)return loginView();if(!r.ok)return app.innerHTML=`<div class="login"><h1>Painel Comprô</h1><p class="err">${esc(j.error||'Erro ao carregar.')}</p><button class="btn btn-main" onclick="location.reload()">Tentar de novo</button></div>`;dash(j)}catch(e){loginView('Sem conexão com o servidor.')}}
+load();
+})();
+</script>
+</body>
+</html>

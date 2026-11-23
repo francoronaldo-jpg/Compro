@@ -1,0 +1,6 @@
+{
+  "name": "compro",
+  "private": true,
+  "description": "Comprô: loja de compras simuladas com painel de acessos anônimos",
+  "engines": { "node": ">=20" }
+}
