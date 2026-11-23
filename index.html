@@ -341,6 +341,7 @@ footer .wrap{padding-block:18px 8px}
 
 <script>
 (function(){
+try{document.documentElement.setAttribute('data-theme',localStorage.getItem('cm_theme')==='"dark"'?'dark':'light')}catch(e){document.documentElement.setAttribute('data-theme','light')}
 const $=s=>document.querySelector(s);
 const brl=n=>n.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 const kfmt=n=>n>=1000?(n/1000).toLocaleString('pt-BR',{maximumFractionDigits:1})+' mil':String(n);
@@ -447,19 +448,33 @@ function renderCats(){
 }
 const norm=x=>String(x).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
 // produtos gerados na hora para qualquer busca sem resultado (fictícios, guardados no navegador)
-const GEN_MAP=[[/fone|headset|audio|som/,'🎧','eletro'],[/celular|smartphone|iphone|galaxy|telefone/,'📱','eletro'],[/notebook|laptop|computador|pc\b/,'💻','eletro'],[/tv|televis/,'📺','eletro'],[/game|video ?game|console|controle/,'🎮','eletro'],[/camera|câmera/,'📷','eletro'],
- [/tenis|sapato|bota|sandalia|chinelo/,'👟','moda'],[/camis|blusa|vestido|calca|saia|roupa|jaqueta|casaco|short/,'👕','moda'],[/bolsa|mochila|carteira/,'👜','acess'],[/oculos/,'🕶️','acess'],[/relogio/,'⌚','acess'],[/anel|colar|brinco|joia|pulseira/,'💍','acess'],
- [/perfume|batom|maquiagem|creme|shampoo|skincare|esmalte|cabelo/,'💄','beleza'],[/fryer|fritadeira|liquidificador|microondas|geladeira|fogao|batedeira|cafeteira/,'🍳','casa'],[/sofa|cadeira|mesa|cama|luminaria|panela|cozinha|casa|toalha|tapete/,'🛋️','casa'],[/cafe|chocolate|cha|vinho|comida|doce|biscoito/,'🍫','mercado'],
- [/bola|bicicleta|bike|academia|yoga|treino|halter|fitness/,'⚽','esporte'],[/cachorro|gato|pet|racao/,'🐾','pets'],[/brinquedo|boneca|lego|pelucia|carrinho/,'🧸','brinq'],[/livro/,'📚','casa'],[/carro|moto/,'🚗','brinq'],[/planta|flor|jardim/,'🪴','casa']];
+const GEN_MAP=[
+ [/camera de seguranca|cftv/,'📹','eletro','img/49.jpg'],[/drone/,'🚁','eletro','img/50.jpg'],[/aspirador/,'🧹','casa','img/51.jpg'],
+ [/celular|smartphone|iphone|galaxy|telefone/,'📱','eletro','img/gen/celular.jpg'],[/notebook|laptop|computador|\bpc\b|macbook/,'💻','eletro','img/gen/notebook.jpg'],
+ [/\btv\b|televis|smart tv/,'📺','eletro','img/gen/tv.jpg'],[/video ?game|console|playstation|xbox|nintendo/,'🎮','eletro','img/gen/console.jpg'],[/controle|joystick/,'🎮','eletro','img/gen/controle.jpg'],
+ [/teclado/,'⌨️','eletro','img/23.jpg'],[/fone|headset|headphone|earbud/,'🎧','eletro','img/18.jpg'],[/caixa de som|\bsom\b|speaker/,'🔊','eletro','img/20.jpg'],[/camera|filmadora/,'📷','eletro','img/22.jpg'],[/relogio|smartwatch/,'⌚','acess','img/19.jpg'],[/tablet|ipad/,'📲','eletro','img/24.jpg'],
+ [/tenis|sapato|bota|sandalia|chinelo|sapatilha/,'👟','moda','img/gen/sapato.jpg'],[/vestido|saia/,'👗','moda','img/2.jpg'],[/jaqueta|casaco|blusa de frio|moletom/,'🧥','moda','img/4.jpg'],[/camis|blusa|roupa|regata|cropped|calca|short|bermuda/,'👕','moda','img/1.jpg'],[/bone|chapeu/,'🧢','moda','img/5.jpg'],
+ [/mochila/,'🎒','acess','img/42.jpg'],[/bolsa|carteira|necessaire/,'👜','moda','img/6.jpg'],[/oculos/,'🕶️','acess','img/41.jpg'],[/anel|colar|brinco|joia|pulseira|alianca/,'💍','acess','img/43.jpg'],
+ [/shampoo|cabelo|condicionador|capilar/,'🧴','beleza','img/54.jpg'],[/esmalte|unha/,'💅','beleza','img/11.jpg'],[/secador|chapinha|escova/,'💇','beleza','img/10.jpg'],[/perfume|colonia|body splash/,'🌸','beleza','img/7.jpg'],[/batom|maquiagem|base|creme|hidratante|skincare|serum|protetor/,'💄','beleza','img/8.jpg'],
+ [/liquidificador|mixer|processador/,'🥤','casa','img/52.jpg'],[/cafe|cafeteira|capsula/,'☕','mercado','img/40.jpg'],[/maquina de lavar|lavadora|lava e seca|secadora/,'🧺','casa','img/gen/lavadora.jpg'],
+ [/fryer|fritadeira|forno|fogao|cooktop|micro-?ondas|geladeira|batedeira|panela|frigideira|cozinha|talher|prato/,'🍳','casa','img/gen/cozinha.jpg'],
+ [/sofa/,'🛋️','casa','img/gen/sofa.jpg'],[/cadeira|banco|banqueta/,'🪑','casa','img/gen/banco.jpg'],[/poltrona|sala|decora|quadro|tapete|cortina|almofada|mesa|estante/,'🛋️','casa','img/gen/sala.jpg'],[/cama|colchao|travesseiro|lencol|edredom/,'🛏️','casa','img/gen/quarto.jpg'],
+ [/luminaria|lampada|abajur|luz/,'💡','casa','img/12.jpg'],[/vela|aromatizador|difusor/,'🕯️','casa','img/15.jpg'],[/planta|flor|jardim|vaso/,'🪴','casa','img/gen/flores.jpg'],
+ [/vinho|cerveja|whisky|espumante/,'🍷','mercado','img/gen/vinho.jpg'],[/suco|drink|refrigerante|bebida|cha gelado/,'🍹','mercado','img/gen/suco.jpg'],[/pizza|comida|lanche|hamburguer|sanduiche/,'🍕','mercado','img/gen/pizza.jpg'],[/bolo|doce|torta|brigadeiro/,'🎂','mercado','img/gen/bolo.jpg'],[/chocolate|bombom/,'🍫','mercado','img/38.jpg'],[/fruta|banana|maca|uva/,'🍌','mercado','img/gen/fruta.jpg'],
+ [/violao|guitarra|ukulele|instrumento|baixo/,'🎸','brinq','img/gen/violao.jpg'],
+ [/bola|futebol|chuteira/,'⚽','esporte','img/29.jpg'],[/bicicleta|bike/,'🚲','esporte','img/28.jpg'],[/creatina|whey|suplemento/,'💪','esporte','img/46.jpg'],[/academia|treino|halter|fitness|yoga|esteira/,'🏋️','esporte','img/gen/fitness.jpg'],
+ [/cachorro|\bcao\b|racao|coleira/,'🐶','pets','img/30.jpg'],[/gato|arranhador/,'🐱','pets','img/31.jpg'],[/pet/,'🐾','pets','img/32.jpg'],
+ [/pelucia|urso/,'🧸','brinq','img/34.jpg'],[/lego|bloco|brinquedo|boneca|jogo/,'🧸','brinq','img/33.jpg'],[/carrinho|miniatura|\bcarro\b|moto/,'🚗','brinq','img/36.jpg']];
+function photoFor(t){const m=GEN_MAP.find(([re])=>re.test(norm(t)));return m?m[3]:'img/gen/presente.jpg'}
 let GEN=load('cm_gen',[]);
 function hashStr(t){let h=2166136261;for(const c of t){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0}
 function cap(t){return t.replace(/\s+/g,' ').trim().replace(/^./,c=>c.toUpperCase())}
-function genFor(q){const t=norm(q).slice(0,40);if(t.length<2)return [];const h=hashStr(t);const m=GEN_MAP.find(([re])=>re.test(t));const e=m?m[1]:'🛍️',cat=m?m[2]:'casa';
+function genFor(q){const t=norm(q).slice(0,40);if(t.length<2)return [];const h=hashStr(t);const m=GEN_MAP.find(([re])=>re.test(t));const e=m?m[1]:'🎁',cat=m?m[2]:'casa',img=m?m[3]:'img/gen/presente.jpg';
  const base=20+(h%480);const nm=cap(String(q).slice(0,40));
  const vars=[[nm,1],[nm+' Premium',1.8],['Kit '+nm.toLowerCase()+' completo',2.4],[nm+' compacto',.7]];
- return vars.map(([n,k],i)=>{const id=900000+((h+i*7919)%90000);const price=Math.round(base*k)+.9;return {id,name:n,cat,price,old:Math.round(price*1.7)+.9,e,h:h%360,rate:4.5+((h>>>i)%5)/10,sold:300+((h>>>(i+3))%9000),tag:'Achado',gen:true,img:'x'}})}
+ return vars.map(([n,k],i)=>{const id=900000+((h+i*7919)%90000);const price=Math.round(base*k)+.9;return {id,name:n,cat,price,old:Math.round(price*1.7)+.9,e,h:h%360,rate:4.5+((h>>>i)%5)/10,sold:300+((h>>>(i+3))%9000),tag:'Achado',gen:true,img}})}
 function addGen(items){items.forEach(p=>{if(!P.some(x=>x.id===p.id)){P.push(p);GEN.push(p)}});GEN=GEN.slice(-60);save('cm_gen',GEN)}
-GEN.forEach(p=>{if(!P.some(x=>x.id===p.id))P.push(p)});
+GEN.forEach(p=>{p.img=photoFor(p.name);if(!P.some(x=>x.id===p.id))P.push(p)});
 S.cart=S.cart.filter(c=>P.some(p=>p.id===c.id));
 function list(){let l=P.filter(p=>!p.gen);if(S.cat==='alta')l=l.filter(p=>p.hot);else if(S.cat!=='all')l=l.filter(p=>p.cat===S.cat);
  if(S.q){const t=norm(S.q),words=t.split(/\s+/).filter(w=>w.length>1);
@@ -727,8 +742,8 @@ document.addEventListener('click',e=>{
 });
 document.addEventListener('error',e=>{const t=e.target;if(t&&t.tagName==='IMG'&&t.closest('.ph'))t.remove()},true);
 let THEME=load('cm_theme','');
-function curDark(){return THEME?THEME==='dark':matchMedia('(prefers-color-scheme: dark)').matches}
-function applyTheme(){if(THEME)document.documentElement.setAttribute('data-theme',THEME);else document.documentElement.removeAttribute('data-theme');const b=$('#themeBtn');if(b){const d=curDark();b.textContent=d?'☀️':'🌙';b.setAttribute('aria-label',d?'Mudar para fundo claro':'Mudar para fundo escuro')}}
+function curDark(){return THEME==='dark'}
+function applyTheme(){document.documentElement.setAttribute('data-theme',THEME==='dark'?'dark':'light');const b=$('#themeBtn');if(b){const d=curDark();b.textContent=d?'☀️':'🌙';b.setAttribute('aria-label',d?'Mudar para fundo claro':'Mudar para fundo escuro')}}
 $('#themeBtn').addEventListener('click',()=>{THEME=curDark()?'light':'dark';save('cm_theme',THEME);applyTheme();sfx.tap()});
 applyTheme();
 $('#sndBtn').addEventListener('click',()=>{SND=!SND;save('cm_snd',SND);syncSnd();if(SND)sfx.tap()});
