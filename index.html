@@ -180,6 +180,20 @@ section{margin-bottom:22px}
 .qty{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:10px;overflow:hidden}
 .qty button{border:0;background:var(--surface-2);width:38px;height:36px;font-size:18px}
 .qty output{min-width:40px;text-align:center;font-weight:700}
+.was{color:var(--muted);font-size:11.5px;line-height:1;margin-top:2px}
+.inst{font-size:11.5px;color:var(--brand);font-weight:600}
+.sb .inst{font-size:13px;margin-top:2px}
+.opt.sw{display:inline-flex;align-items:center;gap:6px}
+.opt.sw i{width:14px;height:14px;border-radius:50%;border:1px solid rgba(0,0,0,.18);flex:none}
+.opt small{font-size:11px;color:var(--muted);margin-left:4px;font-weight:500}
+.opt-l b{color:var(--fg)}
+.seller{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:12px;padding:8px 10px}
+.seller b{display:block;font-size:14px}.seller small{color:var(--muted);font-size:12px}
+.slogo{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-weight:800;color:#fff;background:hsl(var(--h) 45% 38%);flex:none}
+.seller .ok{margin-left:auto;font-size:11px;font-weight:700;color:var(--brand);border:1px solid currentColor;border-radius:999px;padding:2px 8px;white-space:nowrap}
+.ship{display:flex;gap:8px;align-items:flex-start;font-size:13px;color:var(--fg)}.ship small{color:var(--muted)}
+.spec{width:100%;border-collapse:collapse;font-size:13px}.spec th,.spec td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}.spec th{width:40%;color:var(--muted);font-weight:500;background:var(--surface-2)}
+.rev{border-top:1px solid var(--line);padding:8px 0;font-size:13px}.rev .st{color:#E0A100;font-size:12px}.rev p{margin:3px 0 0;color:var(--muted)}
 .sheet-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .note{display:flex;gap:10px;align-items:flex-start;background:var(--surface-2);border:1px dashed var(--line);border-radius:12px;padding:10px 12px;font-size:13px;color:var(--muted)}
 .note svg{flex:none;width:18px;height:18px;color:var(--brand);margin-top:1px}
@@ -373,77 +387,79 @@ const CATS=[
  {id:'eletro',n:'Eletrônicos',e:'🎧'},{id:'esporte',n:'Esportes',e:'🏃'},{id:'pets',n:'Pets',e:'🐾'},
  {id:'brinq',n:'Brinquedos',e:'🧸'},{id:'mercado',n:'Mercado',e:'🛒'},{id:'acess',n:'Acessórios',e:'🕶️'}];
 // [nome, categoria, preço, preço antigo, emoji, matiz, nota, vendidos, selo]
+// [nome, categoria, preço, preço antigo, emoji, matiz, nota, vendidos, selo, marca (fictícia), ficha técnica "Campo=valor; ...", variações "Grupo: opção #cor +preço @foto, ... | Grupo: ..."]
 const RAW=[
- ['Camiseta oversized 100% algodão','moda',39.9,79.9,'👕',200,4.8,12400,'Top'],
- ['Vestido longo esvoaçante','moda',129.9,239.9,'👗',330,4.7,5300,''],
- ['Scarpin floral salto alto','moda',119.9,229.9,'👠',190,4.6,2700,'Novo'],
- ['Jaqueta bomber caramelo','moda',139.9,249.9,'🧥',25,4.6,2100,''],
- ['Boné trucker branco','moda',29.9,59.9,'🧢',10,4.5,3900,''],
- ['Bolsa de mão vermelha','moda',94.9,179.9,'👜',350,4.7,4600,''],
- ['Kit skincare natural 5 passos','beleza',119.9,249.9,'🧴',170,4.9,15800,'Top'],
- ['Hidratante facial 50 g','beleza',39.9,79.9,'🧴',30,4.7,22100,''],
- ['Sérum facial com vitamina C 30 ml','beleza',59.9,119.9,'💧',35,4.8,6400,''],
- ['Secador de cabelo 2000 W','beleza',149.9,299.9,'💇',280,4.7,9300,''],
- ['Kit esmaltes 12 cores','beleza',34.9,69.9,'💅',0,4.5,7100,''],
- ['Luminária de piso articulada','casa',159.9,289.9,'💡',50,4.8,4200,''],
- ['Jogo de cama 4 peças 200 fios','casa',99.9,199.9,'🛏️',190,4.6,3300,''],
- ['Kit potes de cerâmica 6 peças','casa',79.9,139.9,'🫙',30,4.7,11500,''],
- ['Vela aromática lavanda','casa',27.9,49.9,'🕯️',30,4.8,5200,''],
- ['Suculenta em vaso de cerâmica','casa',24.9,44.9,'🪴',110,4.9,18200,'Top'],
- ['Kit xícaras para cappuccino','casa',59.9,99.9,'☕',25,4.6,4100,''],
- ['Fone bluetooth com cancelamento de ruído','eletro',179.9,399.9,'🎧',260,4.8,26300,'Top'],
- ['Smartwatch tela AMOLED','eletro',219.9,459.9,'⌚',230,4.7,14200,''],
- ['Caixa de som de estante','eletro',249.9,449.9,'🔊',190,4.7,3800,''],
- ['Fone de estúdio com fio','eletro',89.9,159.9,'🎧',60,4.6,7700,''],
- ['Câmera analógica retrô','eletro',389.9,599.9,'📷',300,4.8,1900,'Novo'],
- ['Teclado sem fio slim','eletro',129.9,219.9,'⌨️',240,4.7,5100,''],
- ['Tablet 10 polegadas 128 GB','eletro',899.9,1499.9,'📲',210,4.6,3400,''],
- ['Tapete de yoga antiderrapante','esporte',59.9,119.9,'🧘',160,4.8,6900,''],
- ['Garrafa de água 500 ml (fardo com 12)','esporte',29.9,44.9,'💧',185,4.9,20500,''],
- ['Kit halteres e elástico de treino','esporte',89.9,149.9,'🏋️',20,4.7,4300,''],
- ['Bicicleta urbana aro 700','esporte',1199.9,1799.9,'🚲',135,4.6,800,''],
- ['Bola de futebol clássica','esporte',69.9,119.9,'⚽',100,4.7,3600,''],
- ['Peitoral de passeio para cães','pets',49.9,89.9,'🐶',35,4.9,8100,''],
- ['Varinha com penas para gatos','pets',19.9,39.9,'🐱',45,4.8,4200,''],
- ['Brinquedo mordedor resistente','pets',24.9,44.9,'🦴',55,4.6,9600,''],
- ['Blocos de montar 500 peças','brinq',99.9,179.9,'🧱',5,4.8,5700,''],
- ['Urso de pelúcia 40 cm','brinq',79.9,149.9,'🧸',28,4.9,3800,'Top'],
- ['Jogo de tabuleiro de estratégia','brinq',119.9,199.9,'🎲',225,4.7,2900,''],
- ['Miniatura carro clássico 1:24','brinq',139.9,259.9,'🚗',0,4.5,4700,''],
- ['Cesta de café da manhã','mercado',149.9,219.9,'🥐',38,4.8,1300,''],
- ['Chocolate artesanal 70% cacau','mercado',22.9,34.9,'🍫',20,4.9,16700,''],
- ['Chá gelado com limão (6 unidades)','mercado',32.9,49.9,'🍹',95,4.7,3100,''],
- ['Café especial em grãos 500 g','mercado',54.9,79.9,'🫘',30,4.8,6600,'Novo'],
- ['Óculos de sol clássico','acess',69.9,149.9,'🕶️',200,4.6,11200,''],
- ['Mochila notebook impermeável','acess',119.9,229.9,'🎒',220,4.8,7400,''],
- ['Anel prata 925 com zircônia','acess',89.9,169.9,'💍',300,4.7,5900,''],
- ['Relógio analógico pulseira de couro','acess',159.9,299.9,'⌚',35,4.6,1700,'']
+ ['Camiseta Oversized Urbano Basic 100% Algodão','moda',39.9,79.9,'👕',200,4.8,12400,'Top','Urbano','Material=100% algodão fio 30.1; Modelagem=Oversized; Gola=Careca; Gramatura=180 g/m²','Cor: Branco #F5F5F2, Preto #1d1d1f, Areia #D9C9A8, Verde-oliva #6B6B3A | Tamanho: P, M, G, GG, XG'],
+ ['Vestido Longo Ateliê Brisa Esvoaçante com Fenda','moda',129.9,239.9,'👗',330,4.7,5300,'','Ateliê Brisa','Tecido=Viscose; Comprimento=Longo; Forro=Sim; Fechamento=Zíper invisível','Cor: Vermelho #C62828, Preto #1d1d1f, Azul-marinho #1F2A44 | Tamanho: PP, P, M, G, GG'],
+ ['Scarpin Passarela Salto Fino 9 cm Estampa Floral','moda',119.9,229.9,'👠',190,4.6,2700,'Novo','Passarela','Salto=9 cm fino; Material=Sintético acetinado; Bico=Fino; Palmilha=Acolchoada','Estampa: Floral azul #2E5AAC, Floral rosa #D45D8C | Tamanho: 34, 35, 36, 37, 38, 39'],
+ ['Jaqueta Bomber Urbano com Zíper e Forro','moda',139.9,249.9,'🧥',25,4.6,2100,'','Urbano','Tecido=Poliéster com forro; Fechamento=Zíper; Bolsos=2 laterais; Punho=Ribana','Cor: Caramelo #B8734A, Preto #1d1d1f, Verde-militar #4B5320 | Tamanho: P, M, G, GG'],
+ ['Boné Trucker Rota Aba Curva com Tela','moda',29.9,59.9,'🧢',10,4.5,3900,'','Rota','Ajuste=Snapback regulável; Material=Algodão e tela; Aba=Curva','Cor: Branco #F5F5F2, Preto #1d1d1f, Azul #2E5AAC'],
+ ['Bolsa de Mão Lis Couro Sintético com Alça Transversal','moda',94.9,179.9,'👜',350,4.7,4600,'','Lis','Material=Couro sintético; Dimensões=24 x 18 x 10 cm; Alça=Removível e ajustável; Bolsos internos=2','Cor: Vermelho #C62828, Preto #1d1d1f, Nude #D8B39A, Caramelo #B8734A'],
+ ['Kit Skincare Flor de Sal Rotina 5 Passos','beleza',119.9,249.9,'🧴',170,4.9,15800,'Top','Flor de Sal Beauty','Itens=Gel de limpeza, tônico, sérum, hidratante e protetor; Vegano=Sim; Testado dermatologicamente=Sim','Tipo de pele: Mista a oleosa, Seca, Sensível'],
+ ['Hidratante Facial Aurea Ácido Hialurônico 50 g','beleza',39.9,79.9,'🧴',30,4.7,22100,'','Aurea','Conteúdo=50 g; Textura=Gel-creme; Ativo=Ácido hialurônico; Uso=Dia e noite','Versão: Sem fragrância, Fragrância suave'],
+ ['Sérum Facial Aurea Vitamina C 10% 30 ml','beleza',59.9,119.9,'💧',35,4.8,6400,'','Aurea','Conteúdo=30 ml; Ativo=Vitamina C 10%; Uso=Diurno; Tipo de pele=Todos',''],
+ ['Secador de Cabelo Vento Íon 2000 W com Difusor','beleza',149.9,299.9,'💇',280,4.7,9300,'','Vento','Potência=2000 W; Velocidades=2; Temperaturas=3 e jato frio; Acessórios=Bico concentrador e difusor','Cor: Prata #B8BCC2, Preto #1d1d1f, Rosé #D9A6A0 | Voltagem: 127 V, 220 V'],
+ ['Kit Esmaltes Bem-me-quer 12 Cores Cremosos e Cintilantes','beleza',34.9,69.9,'💅',0,4.5,7100,'','Bem-me-quer','Quantidade=12 frascos de 8 ml; Acabamento=Cremoso e cintilante; Secagem=Rápida','Coleção: Outono escuro, Nudes, Coloridos'],
+ ['Luminária de Piso Moro Articulada 1,55 m E27','casa',159.9,289.9,'💡',50,4.8,4200,'','Moro','Altura=1,55 m; Soquete=E27 (lâmpada não inclusa); Material=Metal com pintura epóxi; Cabo=1,8 m','Cor: Grafite #4A4D52, Branco #F5F5F2, Preto #1d1d1f'],
+ ['Jogo de Cama Lar Doce Percal 200 Fios 4 Peças','casa',99.9,199.9,'🛏️',190,4.6,3300,'','Lar Doce','Peças=Lençol com elástico, lençol de cima e 2 fronhas; Fios=200; Material=Algodão e poliéster','Tamanho: Solteiro -30, Casal, Queen +20, King +40 | Cor: Branco #F5F5F2, Cinza #9EA3A8, Azul #5B7DB1'],
+ ['Conjunto de Potes Moro Cerâmica 6 Peças','casa',79.9,139.9,'🫙',30,4.7,11500,'','Moro','Peças=6 potes de tamanhos variados; Material=Cerâmica; Micro-ondas=Sim; Lava-louças=Sim','Cor: Areia #E8DCC8, Branco #F5F5F2'],
+ ['Vela Aromática Essência 180 g em Copo de Vidro','casa',27.9,49.9,'🕯️',30,4.8,5200,'','Essência','Peso=180 g; Duração=Cerca de 40 horas; Cera=Vegetal de soja; Pavio=Algodão','Aroma: Lavanda, Baunilha, Capim-limão, Alecrim'],
+ ['Suculenta Vila Verde em Vaso de Cerâmica 12 cm','casa',24.9,44.9,'🪴',110,4.9,18200,'Top','Vila Verde','Planta=Haworthia (natural); Vaso=Cerâmica 12 cm; Luz=Meia-sombra','Vaso: Verde-água #9ED9CF, Branco #F5F5F2, Terracota #C0643C'],
+ ['Jogo de Xícaras para Cappuccino Brisa Café 4 Peças 200 ml','casa',59.9,99.9,'☕',25,4.6,4100,'','Brisa Café','Peças=4 xícaras com pires; Capacidade=200 ml; Material=Porcelana; Micro-ondas=Sim','Cor: Branco #F5F5F2, Grafite #4A4D52'],
+ ['Fone de Ouvido Bluetooth Lumo Som Q30 com Cancelamento de Ruído','eletro',179.9,399.9,'🎧',260,4.8,26300,'Top','Lumo Som','Bateria=Até 40 h; Bluetooth=5.3; Cancelamento de ruído=Ativo (ANC); Microfone=Sim; Carregamento=USB-C','Cor: Preto #1d1d1f @img/18.jpg, Grafite #4A4D52 @img/v/fn1.jpg, Café #4A3B32 @img/v/fn3.jpg'],
+ ['Smartwatch Kron Fit 2 Tela AMOLED 1,9" com GPS','eletro',219.9,459.9,'⌚',230,4.7,14200,'','Kron','Tela=AMOLED 1,9"; Bateria=Até 10 dias; Resistência=5 ATM; Sensores=Frequência cardíaca, SpO2 e GPS; Compatível=Android e iOS','Cor: Preto #1d1d1f @img/19.jpg, Prata #C8CCD0 @img/v/sw2.jpg, Grafite #4A4D52 @img/v/sw3.jpg'],
+ ['Caixa de Som de Estante Lumo Som Duo 60 W Bluetooth','eletro',249.9,449.9,'🔊',190,4.7,3800,'','Lumo Som','Potência=60 W RMS (par); Conexões=Bluetooth 5.0, RCA e óptica; Acabamento=Madeira; Voltagem=Bivolt','Cor: Madeira escura #5A3A22, Preto #1d1d1f'],
+ ['Fone de Estúdio Sonari M50 com Fio P2 e Adaptador P10','eletro',89.9,159.9,'🎧',60,4.6,7700,'','Sonari','Conexão=P2 3,5 mm e adaptador P10; Driver=40 mm; Cabo=3 m; Dobrável=Sim','Cor: Prata #B8BCC2 @img/21.jpg, Preto #1d1d1f @img/v/fn4.jpg'],
+ ['Câmera Analógica Revela TLR Médio Formato 120','eletro',389.9,599.9,'📷',300,4.8,1900,'Novo','Revela','Formato=Filme 120 (médio formato); Lente=80 mm f/3.5; Tipo=Reflex de lentes gêmeas; Estado=Restaurada',''],
+ ['Teclado Sem Fio Quantra Slim ABNT2 Recarregável','eletro',129.9,219.9,'⌨️',240,4.7,5100,'','Quantra','Layout=ABNT2 com Ç; Conexão=Bluetooth e receptor USB; Bateria=Recarregável USB-C; Teclas=Baixo perfil','Cor: Branco #F5F5F2, Grafite #4A4D52, Rosa #E8B4C0'],
+ ['Tablet Orbia Tab 10 Tela 10,4" 4 GB RAM Wi-Fi','eletro',899.9,1499.9,'📲',210,4.6,3400,'','Orbia','Tela=10,4" 2K; Memória RAM=4 GB; Bateria=7.040 mAh; Sistema=Android 15; Câmeras=8 MP + 5 MP','Armazenamento: 64 GB -150, 128 GB, 256 GB +300 | Cor: Grafite #4A4D52, Prata #C8CCD0'],
+ ['Tapete de Yoga Movi Fit TPE 6 mm Antiderrapante','esporte',59.9,119.9,'🧘',160,4.8,6900,'','Movi Fit','Material=TPE; Espessura=6 mm; Dimensões=183 x 61 cm; Alça de transporte=Sim','Cor: Verde-petróleo #2F6F6A, Lilás #A58BC9, Preto #1d1d1f, Rosa #E39BB0'],
+ ['Água Mineral Fonte Clara 500 ml Fardo com 12','mercado',29.9,44.9,'💧',185,4.9,20500,'','Fonte Clara','Conteúdo=12 garrafas de 500 ml; Origem=Fonte natural; pH=7,4','Tipo: Sem gás, Com gás +3'],
+ ['Kit Treino Movi Fit 2 Halteres Emborrachados + Elástico Extensor','esporte',89.9,149.9,'🏋️',20,4.7,4300,'','Movi Fit','Itens=2 halteres e 1 elástico com alças; Revestimento=Emborrachado','Peso de cada halter: 1 kg -20, 2 kg, 3 kg +25, 5 kg +60'],
+ ['Bicicleta Urbana Pedal Livre Aro 700 Single Speed','esporte',1199.9,1799.9,'🚲',135,4.6,800,'','Pedal Livre','Aro=700c; Quadro=Aço cromo-molibdênio; Marchas=Single speed; Freios=V-brake','Tamanho do quadro: 52 cm, 54 cm, 56 cm | Cor: Branco #F5F5F2, Preto #1d1d1f'],
+ ['Bola de Futebol Gol de Placa Costurada Tamanho 5','esporte',69.9,119.9,'⚽',100,4.7,3600,'','Gol de Placa','Tamanho=Oficial 5; Material=PU; Gomos=32 costurados','Uso: Campo, Society, Futsal -5'],
+ ['Peitoral para Cachorro PetLar Antipuxão com Guia','pets',49.9,89.9,'🐶',35,4.9,8100,'','PetLar','Material=Nylon acolchoado; Inclui=Guia de 1,2 m; Fechamento=Engate rápido','Tamanho: P, M, G | Cor: Caramelo #B8734A, Azul #2E5AAC, Rosa #E39BB0'],
+ ['Varinha para Gatos Patinha com Penas e Guizo','pets',19.9,39.9,'🐱',45,4.8,4200,'','Patinha','Comprimento=60 cm; Inclui=2 refis de penas',''],
+ ['Mordedor para Cães PetLar Borracha Atóxica','pets',24.9,44.9,'🦴',55,4.6,9600,'','PetLar','Material=Borracha natural atóxica; Indicado para=Cães de médio e grande porte','Tamanho: P -5, M, G +8'],
+ ['Blocos de Montar Mundo Bolinha 500 Peças','brinq',99.9,179.9,'🧱',5,4.8,5700,'','Mundo Bolinha','Peças=500; Idade=A partir de 4 anos; Certificação=Inmetro',''],
+ ['Urso de Pelúcia Toca 40 cm Antialérgico','brinq',79.9,149.9,'🧸',28,4.9,3800,'Top','Toca','Altura=40 cm; Enchimento=Fibra siliconizada antialérgica; Idade=Livre','Cor: Mel #C99A5B, Branco #F5F5F2, Rosa #E8B4C0'],
+ ['Jogo de Tabuleiro Lúdica Conquista de Territórios','brinq',119.9,199.9,'🎲',225,4.7,2900,'','Lúdica','Jogadores=2 a 6; Idade=10+; Duração=60 a 120 min',''],
+ ['Miniatura Carro Conversível Garagem Clássica 1:24 Metal','brinq',139.9,259.9,'🚗',0,4.5,4700,'','Garagem Clássica','Escala=1:24; Material=Metal e plástico; Portas=Abrem','Cor: Vermelho #C62828, Azul-claro #8EC5E8, Creme #EFE3C8'],
+ ['Cesta de Café da Manhã Sítio Bom com 15 Itens','mercado',149.9,219.9,'🥐',38,4.8,1300,'','Sítio Bom','Itens=Pães, geleias, frutas, suco, bolo e doces; Embalagem=Cesta de vime','Tamanho: Para 2 pessoas, Para 4 pessoas +70'],
+ ['Chocolate Cacau Raiz 70% Cacau Barra 100 g','mercado',22.9,34.9,'🍫',20,4.9,16700,'','Cacau Raiz','Peso=100 g; Teor de cacau=70%; Sem glúten=Sim','Pacote: 1 barra, 3 barras +40'],
+ ['Chá Gelado Folha Fria 330 ml Pack com 6','mercado',32.9,49.9,'🍹',95,4.7,3100,'','Folha Fria','Conteúdo=6 latas de 330 ml; Açúcar=Baixo teor','Sabor: Limão, Pêssego, Hibisco'],
+ ['Café Especial em Grãos Brisa Café 500 g Torra Média','mercado',54.9,79.9,'🫘',30,4.8,6600,'Novo','Brisa Café','Peso=500 g; Torra=Média; Origem=Sul de Minas; Notas=Chocolate e caramelo','Moagem: Em grãos, Para coado, Para espresso'],
+ ['Óculos de Sol Rota Clássico Polarizado UV400','acess',69.9,149.9,'🕶️',200,4.6,11200,'','Rota','Proteção=UV400; Armação=Acetato; Lente=Polarizada; Acompanha=Estojo','Cor: Preto #1d1d1f, Tartaruga #6B4226'],
+ ['Mochila para Notebook Rota Urban 15,6" Impermeável','acess',119.9,229.9,'🎒',220,4.8,7400,'','Rota','Compartimento=Notebook até 15,6"; Capacidade=22 L; Material=Poliéster impermeável; Saída USB=Sim','Cor: Azul-marinho #1F2A44, Preto #1d1d1f, Cinza #9EA3A8'],
+ ['Anel Prata Fina 925 Solitário com Zircônia','acess',89.9,169.9,'💍',300,4.7,5900,'','Prata Fina','Material=Prata 925; Pedra=Zircônia; Garantia=1 ano','Aro: 12, 14, 16, 18, 20'],
+ ['Relógio Tempo&Co Classic 36 mm Pulseira de Couro','acess',159.9,299.9,'⌚',35,4.6,1700,'','Tempo&Co','Caixa=36 mm em aço inox; Pulseira=Couro legítimo; Resistência=3 ATM; Mecanismo=Quartzo','Pulseira: Marrom #7A5230, Caramelo #B8734A, Preta #1d1d1f']
 ];
+
 /* EM-ALTA-INICIO: bloco trocado pela atualização diária.
    updated: data da lista; fontes: onde a lista foi baseada; hot: ids do catálogo fixo que também estão em alta;
-   items: [id único, nome, categoria, preço, preço antigo, emoji, matiz, nota, vendidos, caminho da foto] */
+   items: [id único, nome (com marca fictícia e configuração), categoria, preço, preço antigo, emoji, matiz, nota, vendidos, caminho da foto, marca fictícia, ficha "Campo=valor; ...", variações "Grupo: opção #cor +preço @foto, ... | Grupo: ..."] */
 const ALTA={updated:'2026-11-23',fontes:'Shopee, TikTok Shop e Mercado Livre Brasil (Black Friday 2026: TV, creatina, celulares e videogames em alta)',hot:[1,9,10,14,19,23],items:[
-  [45,'Fone bluetooth TWS com estojo de carga','eletro',89.9,199.9,'🎧',260,4.7,48200,'img/45.jpg'],
-  [46,'Creatina monohidratada 300 g','esporte',79.9,139.9,'💪',40,4.9,61500,'img/46.jpg'],
-  [47,'Conjunto fitness sem costura','esporte',69.9,129.9,'🏃',330,4.7,23800,'img/47.jpg'],
-  [49,'Kit 2 câmeras de segurança Wi-Fi','eletro',199.9,379.9,'📹',210,4.6,17400,'img/49.jpg'],
-  [50,'Drone com câmera 4K dobrável','eletro',549.9,999.9,'🚁',140,4.5,5600,'img/50.jpg'],
-  [51,'Robô aspirador inteligente','casa',599.9,1199.9,'🧹',200,4.6,12300,'img/51.jpg'],
-  [52,'Liquidificador portátil recarregável','casa',79.9,149.9,'🥤',30,4.7,33900,'img/52.jpg'],
-  [53,'Óleo capilar reparador 60 ml','beleza',39.9,79.9,'💧',40,4.8,27600,'img/53.jpg'],
-  [54,'Kit tratamento capilar 3 passos','beleza',89.9,169.9,'🧴',0,4.8,19800,'img/54.jpg'],
-  [1001,'Smart TV 50 polegadas 4K','eletro',1899.9,3299.9,'📺',210,4.7,15300,'img/alta/1001.jpg'],
-  [1002,'Smartphone 128 GB tela 6,7"','eletro',1299.9,2199.9,'📱',200,4.6,38700,'img/alta/1002.jpg'],
-  [1003,'Console de videogame com controle','eletro',2999.9,4499.9,'🎮',250,4.8,9800,'img/alta/1003.jpg']
+  [45,'Fone Bluetooth TWS Lumo Som Air 3 com Estojo de Carga','eletro',89.9,199.9,'🎧',260,4.7,48200,'img/45.jpg','Lumo Som','Bateria=Até 6 h (30 h com o estojo); Bluetooth=5.3; Resistência=IPX4; Controle=Toque','Cor: Preto #1d1d1f, Branco #F2F2F2, Azul-claro #8EC5E8'],
+  [46,'Creatina Monohidratada Vigor Nutri 300 g 100% Pura','esporte',79.9,139.9,'💪',40,4.9,61500,'img/46.jpg','Vigor Nutri','Peso=300 g; Porção=3 g; Porções=100; Sabor=Sem sabor','Tamanho: 150 g -35, 300 g, 500 g +45, 1 kg +110'],
+  [47,'Conjunto Fitness Movi Fit Top e Legging sem Costura','esporte',69.9,129.9,'🏃',330,4.7,23800,'img/47.jpg','Movi Fit','Tecido=Poliamida e elastano; Peças=Top com bojo e legging cintura alta; Proteção=UV 50+','Cor: Vermelho #C62828, Preto #1d1d1f, Verde-petróleo #2F6F6A | Tamanho: P, M, G, GG'],
+  [49,'Câmera de Segurança Wi-Fi Visiora Full HD 360° Visão Noturna','eletro',199.9,379.9,'📹',210,4.6,17400,'img/49.jpg','Visiora','Resolução=Full HD 1080p; Visão noturna=Até 10 m; Áudio=Bidirecional; Armazenamento=Cartão até 128 GB e nuvem','Quantidade: 2 câmeras, 4 câmeras +170'],
+  [50,'Drone Aerys Mini 4K Dobrável com GPS 249 g','eletro',549.9,999.9,'🚁',140,4.5,5600,'img/50.jpg','Aerys','Câmera=4K 30 fps; Autonomia=Até 28 min; Alcance=Até 4 km; Peso=249 g','Pacote: Só o drone, Combo com 3 baterias +250'],
+  [51,'Robô Aspirador Limpa Fácil R5 Wi-Fi Aspira e Passa Pano','casa',599.9,1199.9,'🧹',200,4.6,12300,'img/51.jpg','Limpa Fácil','Sucção=2.700 Pa; Bateria=Até 120 min; Mapeamento=Sensor laser; Voltagem=Bivolt','Cor: Branco #F5F5F2, Preto #1d1d1f'],
+  [52,'Liquidificador Vida Leve Turbo 1200 W Copo de Vidro 2 L','casa',129.9,229.9,'🥤',30,4.7,33900,'img/52.jpg','Vida Leve','Potência=1200 W; Copo=Vidro 2 L; Velocidades=12 e pulsar; Lâminas=6 em inox','Voltagem: 127 V, 220 V | Cor: Preto #1d1d1f, Vermelho #C62828'],
+  [53,'Óleo Capilar Aurea Argan Reparador de Pontas 60 ml','beleza',39.9,79.9,'💧',40,4.8,27600,'img/53.jpg','Aurea','Conteúdo=60 ml; Ativo=Óleo de argan; Indicação=Pontas secas e frizz',''],
+  [54,'Kit Tratamento Capilar Aurea Shampoo, Condicionador e Máscara','beleza',89.9,169.9,'🧴',0,4.8,19800,'img/54.jpg','Aurea','Itens=Shampoo 300 ml, condicionador 300 ml e máscara 250 g; Livre de=Sulfato e parabenos','Tipo de cabelo: Liso, Cacheado, Danificado'],
+  [1001,'Smart TV Visiora 50" 4K UHD Wi-Fi com Comando de Voz','eletro',1899.9,3299.9,'📺',210,4.7,15300,'img/alta/1001.jpg','Visiora','Tela=LED 4K UHD; HDR=HDR10; Conexões=3 HDMI, 2 USB, Wi-Fi e Bluetooth; Sistema=Visiora OS','Tamanho: 43" -400, 50", 55" +500, 65" +1400'],
+  [1002,'Smartphone Nexo N7 5G 6,7" 8 GB RAM Câmera 50 MP','eletro',1299.9,2199.9,'📱',200,4.6,38700,'img/alta/1002.jpg','Nexo','Tela=6,7" AMOLED 120 Hz; Memória RAM=8 GB; Câmeras=50 MP + 8 MP; Bateria=5.000 mAh; Sistema=Android 15','Armazenamento: 128 GB, 256 GB +300 | Cor: Azul-oceano #2D7F9A @img/alta/1002.jpg, Preto #1d1d1f @img/v/cel4.jpg, Vermelho #B3202A @img/v/cel3.jpg'],
+  [1003,'Console Arcadia X 1 TB com Controle Sem Fio','eletro',2999.9,4499.9,'🎮',250,4.8,9800,'img/alta/1003.jpg','Arcadia','Armazenamento=SSD 1 TB; Resolução=Até 4K 120 fps; Inclui=1 controle e cabo HDMI 2.1','Edição: Com leitor de disco, Digital -400 | Controles: 1 controle, 2 controles +350']
 ]};
 /* EM-ALTA-FIM */
-const P=RAW.map((r,i)=>({id:i+1,name:r[0],cat:r[1],price:r[2],old:r[3],e:r[4],h:r[5],rate:r[6],sold:r[7],tag:r[8]}));
-ALTA.items.forEach(r=>P.push({id:r[0],name:r[1],cat:r[2],price:r[3],old:r[4],e:r[5],h:r[6],rate:r[7],sold:r[8],tag:'Em alta',img:r[9],hot:true}));
+const P=RAW.map((r,i)=>({id:i+1,name:r[0],cat:r[1],price:r[2],old:r[3],e:r[4],h:r[5],rate:r[6],sold:r[7],tag:r[8],brand:r[9],spec:r[10],vars:r[11]}));
+ALTA.items.forEach(r=>P.push({id:r[0],name:r[1],cat:r[2],price:r[3],old:r[4],e:r[5],h:r[6],rate:r[7],sold:r[8],tag:'Em alta',img:r[9],hot:true,brand:r[10],spec:r[11],vars:r[12]}));
 P.forEach(p=>{if(ALTA.hot.includes(p.id)){p.hot=true;if(!p.tag)p.tag='Em alta'}});
 // BLACK FRIDAY: produtos selecionados com até 50% off até 30/11/2026 23:59 (Brasília). Sai sozinha depois.
 const BF={end:new Date('2026-11-30T23:59:59-03:00').getTime(),items:{18:50,13:50,6:50,34:50,12:45,3:45,51:45,7:40,19:40,42:40,22:35,50:35,24:30,10:30,28:25}};
 const bfOn=()=>Date.now()<BF.end;
-if(bfOn())P.forEach(p=>{const k=BF.items[p.id];if(k){p.bf=k;p.price=Math.round(p.old*(1-k/100)*10)/10-0.01;p.price=Math.round(p.price*100)/100;p.tag='Black Friday'}});
+if(bfOn())P.forEach(p=>{const k=BF.items[p.id];if(k){p.bf=k;p.price=Math.round((Math.floor(p.old*(1-k/100))-0.1)*100)/100;p.tag='Black Friday'}});
 const byId=id=>P.find(p=>p.id===+id);
 const OPTS={moda:{l:'Tamanho',v:['P','M','G','GG']},beleza:null,casa:{l:'Cor',v:['Areia','Grafite','Branco']},eletro:{l:'Cor',v:['Preto','Branco','Azul']},esporte:{l:'Cor',v:['Verde','Rosa','Preto']},pets:{l:'Tamanho',v:['P','M','G']},brinq:null,mercado:null,acess:{l:'Cor',v:['Preto','Dourado','Prata']}};
 const PAYS=[
@@ -460,9 +476,10 @@ S.addrMode='skip';S.orders.forEach(o=>{if(o.addr)o.addr=true});save('cm_orders',
 
 const pct=p=>Math.round((1-p.price/p.old)*100);
 const ph=(p,extra='')=>`<div class="ph" style="--h:${p.h}"><span aria-hidden="true">${p.e}</span><img src="${p.img||'img/'+p.id+'.jpg'}" alt="" loading="lazy" decoding="async">${extra}</div>`;
-function card(p){return `<button class="card" data-open="${p.id}" aria-label="${esc(p.name)}, ${brl(p.price)}">
- ${ph(p,`<b class="off num">-${pct(p)}%</b>${p.tag?`<i class="tagx${p.bf?' bftag':''}">${p.tag}</i>`:''}`)}
- <div class="ci"><p class="nm">${esc(p.name)}</p><div class="pr num">${brl(p.price)}</div>
+function card(p){const o=pct(p),inst=parc(p.price);return `<button class="card" data-open="${p.id}" aria-label="${esc(p.name)}, ${brl(p.price)}">
+ ${ph(p,`${o>=5?`<b class="off num">-${o}%</b>`:''}${p.tag?`<i class="tagx${p.bf?' bftag':''}">${p.tag}</i>`:''}`)}
+ <div class="ci"><p class="nm">${esc(p.name)}</p>${p.old>p.price?`<s class="was num">${brl(p.old)}</s>`:''}<div class="pr num">${brl(p.price)}</div>
+ ${inst?`<div class="inst num">${inst.replace(' de ',' ').replace(' sem juros','')}</div>`:''}
  ${p.price>=49.9?'<span class="free">Frete grátis</span>':''}
  <div class="meta num"><span class="st">★</span>${p.rate.toLocaleString('pt-BR')} · ${kfmt(p.sold)} vendidos</div></div></button>`}
 
@@ -474,42 +491,122 @@ function renderCats(){
  $('#cats').innerHTML=CATS.map(c=>`<button class="chip" data-cat="${c.id}" aria-pressed="${S.view==='home'&&S.cat===c.id}"><span aria-hidden="true">${c.e}</span>${c.n}</button>`).join('');
 }
 const norm=x=>String(x).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
-// produtos gerados na hora para qualquer busca sem resultado (fictícios, guardados no navegador)
-const GEN_MAP=[
- [/camera de seguranca|cftv/,'📹','eletro','img/49.jpg'],[/drone/,'🚁','eletro','img/50.jpg'],[/aspirador/,'🧹','casa','img/51.jpg'],
- [/celular|smartphone|iphone|galaxy|telefone/,'📱','eletro','img/gen/celular.jpg'],[/notebook|laptop|computador|\bpc\b|macbook/,'💻','eletro','img/gen/notebook.jpg'],
- [/\btv\b|televis|smart tv/,'📺','eletro','img/gen/tv.jpg'],[/video ?game|console|playstation|xbox|nintendo/,'🎮','eletro','img/gen/console.jpg'],[/controle|joystick/,'🎮','eletro','img/gen/controle.jpg'],
- [/teclado/,'⌨️','eletro','img/23.jpg'],[/fone|headset|headphone|earbud/,'🎧','eletro','img/18.jpg'],[/caixa de som|\bsom\b|speaker/,'🔊','eletro','img/20.jpg'],[/camera|filmadora/,'📷','eletro','img/22.jpg'],[/relogio|smartwatch/,'⌚','acess','img/19.jpg'],[/tablet|ipad/,'📲','eletro','img/24.jpg'],
- [/tenis|sapato|bota|sandalia|chinelo|sapatilha/,'👟','moda','img/gen/sapato.jpg'],[/vestido|saia/,'👗','moda','img/2.jpg'],[/jaqueta|casaco|blusa de frio|moletom/,'🧥','moda','img/4.jpg'],[/camis|blusa|roupa|regata|cropped|calca|short|bermuda/,'👕','moda','img/1.jpg'],[/bone|chapeu/,'🧢','moda','img/5.jpg'],
- [/mochila/,'🎒','acess','img/42.jpg'],[/bolsa|carteira|necessaire/,'👜','moda','img/6.jpg'],[/oculos/,'🕶️','acess','img/41.jpg'],[/anel|colar|brinco|joia|pulseira|alianca/,'💍','acess','img/43.jpg'],
- [/shampoo|cabelo|condicionador|capilar/,'🧴','beleza','img/54.jpg'],[/esmalte|unha/,'💅','beleza','img/11.jpg'],[/secador|chapinha|escova/,'💇','beleza','img/10.jpg'],[/perfume|colonia|body splash/,'🌸','beleza','img/7.jpg'],[/batom|maquiagem|base|creme|hidratante|skincare|serum|protetor/,'💄','beleza','img/8.jpg'],
- [/liquidificador|mixer|processador/,'🥤','casa','img/52.jpg'],[/cafe|cafeteira|capsula/,'☕','mercado','img/40.jpg'],[/maquina de lavar|lavadora|lava e seca|secadora/,'🧺','casa','img/gen/lavadora.jpg'],
- [/fryer|fritadeira|forno|fogao|cooktop|micro-?ondas|geladeira|batedeira|panela|frigideira|cozinha|talher|prato/,'🍳','casa','img/gen/cozinha.jpg'],
- [/sofa/,'🛋️','casa','img/gen/sofa.jpg'],[/cadeira|banco|banqueta/,'🪑','casa','img/gen/banco.jpg'],[/poltrona|sala|decora|quadro|tapete|cortina|almofada|mesa|estante/,'🛋️','casa','img/gen/sala.jpg'],[/cama|colchao|travesseiro|lencol|edredom/,'🛏️','casa','img/gen/quarto.jpg'],
- [/luminaria|lampada|abajur|luz/,'💡','casa','img/12.jpg'],[/vela|aromatizador|difusor/,'🕯️','casa','img/15.jpg'],[/planta|flor|jardim|vaso/,'🪴','casa','img/gen/flores.jpg'],
- [/vinho|cerveja|whisky|espumante/,'🍷','mercado','img/gen/vinho.jpg'],[/suco|drink|refrigerante|bebida|cha gelado/,'🍹','mercado','img/gen/suco.jpg'],[/pizza|comida|lanche|hamburguer|sanduiche/,'🍕','mercado','img/gen/pizza.jpg'],[/bolo|doce|torta|brigadeiro/,'🎂','mercado','img/gen/bolo.jpg'],[/chocolate|bombom/,'🍫','mercado','img/38.jpg'],[/fruta|banana|maca|uva/,'🍌','mercado','img/gen/fruta.jpg'],
- [/violao|guitarra|ukulele|instrumento|baixo/,'🎸','brinq','img/gen/violao.jpg'],
- [/bola|futebol|chuteira/,'⚽','esporte','img/29.jpg'],[/bicicleta|bike/,'🚲','esporte','img/28.jpg'],[/creatina|whey|suplemento/,'💪','esporte','img/46.jpg'],[/academia|treino|halter|fitness|yoga|esteira/,'🏋️','esporte','img/gen/fitness.jpg'],
- [/cachorro|\bcao\b|racao|coleira/,'🐶','pets','img/30.jpg'],[/gato|arranhador/,'🐱','pets','img/31.jpg'],[/pet/,'🐾','pets','img/32.jpg'],
- [/pelucia|urso/,'🧸','brinq','img/34.jpg'],[/lego|bloco|brinquedo|boneca|jogo/,'🧸','brinq','img/33.jpg'],[/carrinho|miniatura|\bcarro\b|moto/,'🚗','brinq','img/36.jpg']];
-function photoFor(t){const m=GEN_MAP.find(([re])=>re.test(norm(t)));return m?m[3]:'img/gen/presente.jpg'}
-let GEN=load('cm_gen',[]);
+// Famílias de produto: usadas para criar ofertas realistas em qualquer busca (marcas fictícias, configurações e fotos diferentes)
+// {re, e, cat, t: tipo, b: marcas, i: fotos, p: preço base, c: [sufixo, multiplicador, ficha], v: variações}
+const COR='Cor: Preto #1d1d1f, Branco #F5F5F2, Azul #2E5AAC';
+const FAM=[
+ {re:/camera de seguranca|cftv/,e:'📹',cat:'eletro',t:'Câmera de Segurança',b:['Visiora','Guarda','Olho Vivo'],i:['img/49.jpg'],p:150,c:[['Wi-Fi Full HD 360°',1,'Resolução=Full HD; Visão noturna=Até 10 m'],['Externa 2K à Prova d\'Água',1.5,'Resolução=2K; Proteção=IP66'],['Wi-Fi HD Compacta',.6,'Resolução=HD 720p']],v:'Quantidade: 1 unidade, 2 unidades +120'},
+ {re:/drone/,e:'🚁',cat:'eletro',t:'Drone',b:['Aerys','Voa','Céu Aberto'],i:['img/50.jpg'],p:400,c:[['Mini 4K com GPS',1.4,'Câmera=4K; Autonomia=28 min'],['Full HD Dobrável',.7,'Câmera=Full HD; Autonomia=18 min'],['Pro 6K com Sensor de Obstáculos',3.2,'Câmera=6K; Autonomia=40 min']],v:'Pacote: Só o drone, Combo com 3 baterias +250'},
+ {re:/aspirador/,e:'🧹',cat:'casa',t:'Aspirador',b:['Limpa Fácil','Brilho','Casa Viva'],i:['img/51.jpg'],p:250,c:[['Robô Wi-Fi Aspira e Passa Pano',2.2,'Tipo=Robô; Bateria=120 min'],['Vertical Sem Fio 2 em 1',1.3,'Tipo=Vertical; Bateria=40 min'],['de Pó Portátil 1200 W',.6,'Tipo=Portátil; Potência=1200 W']],v:'Voltagem: 127 V, 220 V'},
+ {re:/celular|smartphone|iphone|galaxy|telefone|xiaomi|motorola|samsung/,e:'📱',cat:'eletro',t:'Smartphone',b:['Nexo','Vortex','Orbia','Kaipo','Zuno','Lume'],i:['img/v/cel1.jpg','img/v/cel2.jpg','img/v/cel3.jpg','img/v/cel4.jpg','img/v/cel5.jpg','img/v/cel6.jpg','img/v/cel7.jpg','img/v/cel8.jpg','img/v/cel9.jpg'],p:900,
+  c:[['5G 128 GB 6 GB RAM Tela 6,6"',1,'Armazenamento=128 GB; Memória RAM=6 GB; Câmera=50 MP; Bateria=5.000 mAh'],['5G 256 GB 8 GB RAM Câmera 108 MP',1.7,'Armazenamento=256 GB; Memória RAM=8 GB; Câmera=108 MP; Bateria=5.000 mAh'],['4G 64 GB 4 GB RAM Tela 6,5"',.55,'Armazenamento=64 GB; Memória RAM=4 GB; Câmera=13 MP; Bateria=5.000 mAh'],['5G 512 GB 12 GB RAM Tela AMOLED 120 Hz',2.9,'Armazenamento=512 GB; Memória RAM=12 GB; Câmera=200 MP; Bateria=5.500 mAh'],['5G 128 GB 8 GB RAM Câmera 64 MP',1.25,'Armazenamento=128 GB; Memória RAM=8 GB; Câmera=64 MP; Bateria=4.800 mAh'],['4G 128 GB 4 GB RAM Bateria 6.000 mAh',.75,'Armazenamento=128 GB; Memória RAM=4 GB; Câmera=50 MP; Bateria=6.000 mAh']],
+  v:'Cor: Preto #1d1d1f, Azul #2D5F9A, Verde-menta #9ED9C3, Lilás #B9A6D9'},
+ {re:/notebook|laptop|computador|\bpc\b|macbook|ultrabook/,e:'💻',cat:'eletro',t:'Notebook',b:['Altis','Quantra','Vexa','Norte'],i:['img/v/nb1.jpg','img/v/nb2.jpg','img/v/nb3.jpg','img/v/nb4.jpg','img/v/nb5.jpg','img/gen/notebook.jpg'],p:2600,
+  c:[['Core i5 16 GB SSD 512 GB Tela 15,6" Full HD',1,'Processador=Intel Core i5 13ª geração; Memória RAM=16 GB; Armazenamento=SSD 512 GB; Tela=15,6" Full HD'],['Ryzen 7 16 GB SSD 1 TB Tela 14" 2K',1.45,'Processador=AMD Ryzen 7; Memória RAM=16 GB; Armazenamento=SSD 1 TB; Tela=14" 2K'],['Celeron 4 GB SSD 128 GB Tela 14"',.5,'Processador=Intel Celeron; Memória RAM=4 GB; Armazenamento=SSD 128 GB; Tela=14" HD'],['Gamer Core i7 RTX 4060 16 GB SSD 1 TB',2.3,'Processador=Intel Core i7; Placa de vídeo=RTX 4060 8 GB; Memória RAM=16 GB; Tela=15,6" 144 Hz'],['Core i3 8 GB SSD 256 GB Tela 15,6"',.72,'Processador=Intel Core i3; Memória RAM=8 GB; Armazenamento=SSD 256 GB; Tela=15,6" Full HD']],
+  v:'Cor: Cinza-grafite #4A4D52, Prata #C8CCD0'},
+ {re:/\btv\b|televis|smart ?tv|televisor/,e:'📺',cat:'eletro',t:'Smart TV',b:['Visiora','Prisma','Telix'],i:['img/v/tv1.jpg','img/gen/tv.jpg','img/alta/1001.jpg'],p:1800,
+  c:[['50" 4K UHD Wi-Fi',1,'Tela=50" LED 4K; HDR=HDR10; Conexões=3 HDMI e 2 USB'],['55" QLED 4K 120 Hz',1.7,'Tela=55" QLED 4K; Taxa=120 Hz; Conexões=4 HDMI'],['32" HD com Wi-Fi',.5,'Tela=32" LED HD; Conexões=2 HDMI e 1 USB'],['65" 4K UHD com Comando de Voz',2.3,'Tela=65" LED 4K; HDR=HDR10+; Conexões=3 HDMI'],['43" Full HD Wi-Fi',.7,'Tela=43" LED Full HD; Conexões=2 HDMI e 2 USB']],v:''},
+ {re:/video ?game|console|playstation|xbox|nintendo|\bps[45]\b/,e:'🎮',cat:'eletro',t:'Console',b:['Arcadia','Pixon','Nível 9'],i:['img/v/vg2.jpg','img/gen/console.jpg','img/alta/1003.jpg'],p:2800,
+  c:[['X 1 TB com Controle',1,'Armazenamento=SSD 1 TB; Resolução=Até 4K'],['S Digital 512 GB',.65,'Armazenamento=SSD 512 GB; Resolução=Até 1440p'],['Portátil 7" OLED 64 GB',.55,'Tela=7" OLED; Armazenamento=64 GB']],v:'Edição: Padrão, Com 2 jogos +250'},
+ {re:/controle|joystick|gamepad/,e:'🎮',cat:'eletro',t:'Controle Sem Fio',b:['Arcadia','Pixon','Nível 9'],i:['img/v/vg1.jpg','img/gen/controle.jpg','img/v/vg2.jpg'],p:280,c:[['Bluetooth com Vibração',1,'Conexão=Bluetooth e USB-C; Bateria=Até 12 h'],['Pro com Botões Traseiros',1.8,'Conexão=Bluetooth; Botões extras=4'],['USB com Fio 3 m',.45,'Conexão=Cabo USB 3 m']],v:'Cor: Preto #1d1d1f, Branco #F5F5F2, Azul #2E5AAC, Vermelho #C62828'},
+ {re:/teclado/,e:'⌨️',cat:'eletro',t:'Teclado',b:['Quantra','Altis','Tecla Viva'],i:['img/23.jpg'],p:130,c:[['Sem Fio Slim ABNT2',1,'Layout=ABNT2'],['Mecânico RGB Switch Azul',2.1,'Tipo=Mecânico; Iluminação=RGB'],['USB com Apoio de Pulso',.6,'Conexão=USB']],v:'Cor: Branco #F5F5F2, Grafite #4A4D52'},
+ {re:/fone|headset|headphone|earbud|airpod/,e:'🎧',cat:'eletro',t:'Fone de Ouvido',b:['Lumo Som','Sonari','Bassi','Eco'],i:['img/v/fn1.jpg','img/v/fn2.jpg','img/v/fn3.jpg','img/v/fn4.jpg','img/18.jpg','img/45.jpg','img/21.jpg'],p:160,
+  c:[['Bluetooth com Cancelamento de Ruído',1.4,'Tipo=Over-ear; Bateria=Até 40 h; ANC=Sim'],['TWS Bluetooth 5.3 com Estojo',.6,'Tipo=Intra-auricular; Bateria=30 h com estojo','img/45.jpg'],['Gamer com Microfone e LED',.9,'Tipo=Headset; Conexão=USB e P2'],['de Estúdio com Fio P2',.7,'Tipo=Over-ear; Conexão=P2 e P10','img/v/fn4.jpg'],['Esportivo à Prova de Suor',.5,'Tipo=Intra-auricular; Resistência=IPX5','img/45.jpg']],v:'Cor: Preto #1d1d1f, Branco #F5F5F2, Azul-claro #8EC5E8'},
+ {re:/caixa de som|\bsom\b|speaker|soundbar/,e:'🔊',cat:'eletro',t:'Caixa de Som',b:['Lumo Som','Bassi','Sonari'],i:['img/20.jpg'],p:200,c:[['Bluetooth Portátil à Prova d\'Água 20 W',.8,'Potência=20 W; Proteção=IPX7'],['de Estante 60 W',1.3,'Potência=60 W'],['Soundbar 2.1 com Subwoofer',2.2,'Potência=160 W']],v:'Cor: Preto #1d1d1f, Azul #2E5AAC'},
+ {re:/camera|filmadora/,e:'📷',cat:'eletro',t:'Câmera',b:['Revela','Foco','Lente Viva'],i:['img/22.jpg'],p:900,c:[['Mirrorless 24 MP com Lente 18-55 mm',2,'Sensor=24 MP APS-C'],['Instantânea com Filme',.4,'Tipo=Instantânea'],['de Ação 4K à Prova d\'Água',.8,'Resolução=4K 60 fps']],v:''},
+ {re:/smartwatch|relogio inteligente|smartband/,e:'⌚',cat:'eletro',t:'Smartwatch',b:['Kron','Vigor','Pulso'],i:['img/v/sw1.jpg','img/v/sw2.jpg','img/v/sw3.jpg','img/v/sw4.jpg','img/19.jpg'],p:250,c:[['Tela AMOLED com GPS',1.2,'Tela=AMOLED 1,9"; GPS=Sim'],['Fit Tela 1,8" Bluetooth',.6,'Tela=LCD 1,8"; Chamadas=Bluetooth'],['Pro Caixa de Titânio',2.6,'Caixa=Titânio; Bateria=14 dias'],['Kids com Localização',.8,'Localização=GPS e chip']],v:'Cor: Preto #1d1d1f, Prata #C8CCD0, Rosé #D9A6A0'},
+ {re:/relogio/,e:'⌚',cat:'acess',t:'Relógio',b:['Tempo&Co','Kron','Ponteiro'],i:['img/44.jpg','img/v/rl1.jpg','img/v/rl2.jpg','img/v/sw2.jpg'],p:180,c:[['Analógico Pulseira de Couro 40 mm',1,'Mecanismo=Quartzo; Pulseira=Couro'],['Automático Fundo Aberto',3,'Mecanismo=Automático'],['Feminino Rosé 32 mm',.9,'Caixa=32 mm'],['Smartwatch Tela AMOLED',1.3,'Tipo=Smartwatch']],v:'Pulseira: Marrom #7A5230, Preta #1d1d1f'},
+ {re:/tablet|ipad/,e:'📲',cat:'eletro',t:'Tablet',b:['Orbia','Nexo','Vexa'],i:['img/24.jpg'],p:900,c:[['10,4" 128 GB Wi-Fi',1,'Tela=10,4"; Armazenamento=128 GB'],['11" 256 GB com Caneta',1.8,'Tela=11"; Armazenamento=256 GB'],['8" 32 GB Infantil com Capa',.4,'Tela=8"; Armazenamento=32 GB']],v:'Cor: Grafite #4A4D52, Prata #C8CCD0'},
+ {re:/tenis|sapato|\bbotas?\b|sandalia|chinelo|sapatilha|calcado/,e:'👟',cat:'moda',t:'Tênis',b:['Passo','Corre','Pulsar','Trilho'],i:['img/v/tn1.jpg','img/v/tn2.jpg','img/v/tn3.jpg','img/gen/sapato.jpg'],p:200,c:[['Casual Couro Sintético',1,'Cabedal=Couro sintético; Solado=Borracha'],['de Corrida Amortecimento em Gel',1.6,'Indicação=Corrida; Peso=260 g'],['Knit Leve Calce Fácil',.8,'Cabedal=Tecido knit'],['Casual Cano Médio Couro',1.5,'Cano=Médio; Cabedal=Couro','img/48.jpg'],['Slip On Lona',.6,'Cabedal=Lona; Fechamento=Sem cadarço'],['Chunky Plataforma',1.3,'Solado=Plataforma 5 cm']],v:'Tamanho: 36, 37, 38, 39, 40, 41, 42, 43 | Cor: Branco #F5F5F2, Preto #1d1d1f, Cinza #9EA3A8'},
+ {re:/vestido/,e:'👗',cat:'moda',t:'',b:['Ateliê Brisa','Lis','Flora'],i:['img/2.jpg','img/v/ve1.jpg'],p:110,c:[['Vestido Longo Estampado Alça Fina',1.1,'Comprimento=Longo; Tecido=Viscose','img/2.jpg'],['Vestido Chemise Jeans com Botões',.9,'Comprimento=Midi; Tecido=Jeans leve','img/v/ve1.jpg'],['Vestido Midi Canelado',.8,'Comprimento=Midi; Tecido=Canelado','img/2.jpg'],['Vestido Curto Jeans Manga Curta',.7,'Comprimento=Curto; Tecido=Jeans','img/v/ve1.jpg']],v:'Tamanho: PP, P, M, G, GG | Cor: Vermelho #C62828, Preto #1d1d1f, Azul-jeans #5B7DB1'},
+ {re:/\bsaias?\b/,e:'👗',cat:'moda',t:'',b:['Ateliê Brisa','Lis','Flora'],i:['img/v/sa1.jpg','img/v/sa2.jpg'],p:80,c:[['Saia Godê Curta Cintura Alta',1,'Comprimento=Curto; Tecido=Crepe','img/v/sa1.jpg'],['Saia Midi Plissada Acetinada',1.3,'Comprimento=Midi; Tecido=Cetim','img/v/sa2.jpg'],['Saia Evasê Preta com Forro',.9,'Comprimento=Curto; Forro=Sim','img/v/sa1.jpg']],v:'Tamanho: P, M, G, GG | Cor: Preto #1d1d1f, Rosé #D9A6A0, Bege #D9C9A8'},
+ {re:/moletom|blusa de frio|agasalho|hoodie/,e:'🧥',cat:'moda',t:'',b:['Urbano','Norte','Rota'],i:['img/v/mo1.jpg','img/v/mo2.jpg','img/v/mo3.jpg'],p:120,c:[['Moletom Canguru com Capuz Flanelado',1,'Tecido=Algodão e poliéster; Interior=Flanelado','img/v/mo1.jpg'],['Moletom Careca Básico Gola Redonda',.75,'Tecido=Algodão; Modelagem=Regular','img/v/mo2.jpg'],['Conjunto Moletom Cropped e Calça Jogger',1.5,'Peças=Blusa cropped e calça','img/v/mo3.jpg']],v:'Tamanho: P, M, G, GG | Cor: Cinza mescla #9EA3A8, Branco #F5F5F2, Amarelo #F2C230, Preto #1d1d1f'},
+ {re:/jaqueta|casaco|blazer|corta-?vento/,e:'🧥',cat:'moda',t:'',b:['Urbano','Norte','Rota'],i:['img/4.jpg'],p:160,c:[['Jaqueta Bomber com Forro',1,'Tecido=Poliéster','img/4.jpg'],['Jaqueta Puffer Impermeável',1.5,'Enchimento=Fibra','img/v/mo1.jpg'],['Jaqueta Jeans Oversized',1.1,'Tecido=Jeans','img/v/ca4.jpg']],v:'Tamanho: P, M, G, GG | Cor: Preto #1d1d1f, Caramelo #B8734A, Verde-militar #4B5320'},
+ {re:/bermuda|\bshorts?\b/,e:'🩳',cat:'moda',t:'',b:['Urbano','Básico & Co','Rota','Praia Boa'],i:['img/v/sh1.jpg','img/v/sh2.jpg','img/v/sh3.jpg'],p:70,c:[['Short Jeans Cintura Alta Destroyed',1,'Tecido=Jeans 100% algodão; Cintura=Alta','img/v/sh1.jpg'],['Bermuda Listrada de Linho com Elástico',1.2,'Tecido=Linho e viscose; Cós=Elástico com cordão','img/v/sh2.jpg'],['Short de Sarja com Bolsos',.9,'Tecido=Sarja; Bolsos=4','img/v/sh3.jpg'],['Bermuda Jeans Masculina Slim',1.3,'Tecido=Jeans com elastano; Modelagem=Slim','img/v/sh1.jpg']],v:'Tamanho: 36, 38, 40, 42, 44, 46 | Cor: Azul-claro #8EC5E8, Azul-escuro #1F2A44, Bege #D9C9A8'},
+ {re:/calca|jeans|jogger|pantalona/,e:'👖',cat:'moda',t:'',b:['Urbano','Básico & Co','Índigo','Rota'],i:['img/v/ca1.jpg','img/v/ca2.jpg','img/v/ca3.jpg','img/v/ca4.jpg','img/v/ca5.jpg','img/v/ca6.jpg'],p:130,c:[['Calça Jeans Skinny Cintura Alta',1,'Tecido=Jeans com elastano; Modelagem=Skinny','img/v/ca2.jpg'],['Calça Jeans Masculina Slim Destroyed',1.1,'Tecido=Jeans; Modelagem=Slim','img/v/ca1.jpg'],['Calça Chino Sarja Masculina',.95,'Tecido=Sarja; Modelagem=Slim','img/v/ca4.jpg'],['Calça Jogger Feminina com Elástico',.75,'Tecido=Viscolinho; Barra=Punho','img/v/ca6.jpg'],['Calça Jeans Reta Tradicional',1.05,'Tecido=Jeans 100% algodão; Modelagem=Reta','img/v/ca5.jpg'],['Calça de Alfaiataria Preta',1.25,'Tecido=Alfaiataria; Cintura=Média','img/v/ca3.jpg']],v:'Tamanho: 36, 38, 40, 42, 44, 46 | Cor: Azul médio #5B7DB1, Azul-escuro #1F2A44, Preto #1d1d1f'},
+ {re:/\bpolo\b|camisa(?!ta)|social|xadrez/,e:'👔',cat:'moda',t:'',b:['Urbano','Alfaiate','Básico & Co'],i:['img/v/cs1.jpg','img/v/cs2.jpg','img/v/cs3.jpg','img/v/cs4.jpg'],p:90,c:[['Camisa Polo Piquet Masculina',1,'Tecido=Piquet de algodão; Gola=Polo','img/v/cs1.jpg'],['Camisa Jeans Manga Longa Estampada',1.2,'Tecido=Jeans leve; Manga=Longa','img/v/cs2.jpg'],['Camisa Social Slim Fit Algodão',1.4,'Tecido=Tricoline; Modelagem=Slim','img/v/cs3.jpg'],['Camisa Xadrez de Flanela',1.1,'Tecido=Flanela; Manga=Longa','img/v/cs4.jpg']],v:'Tamanho: P, M, G, GG | Cor: Azul #2E5AAC, Branco #F5F5F2, Vinho #5E1A2B, Verde #2F9E7A'},
+ {re:/blusa|cropped|regata|\bbata\b|\btop\b/,e:'👚',cat:'moda',t:'',b:['Ateliê Brisa','Lis','Flora'],i:['img/v/bl1.jpg','img/v/bl2.jpg'],p:70,c:[['Blusa Cropped Bordada Floral',1,'Tecido=Algodão; Modelagem=Cropped','img/v/bl1.jpg'],['Blusa Poncho de Crochê com Franjas',1.4,'Tecido=Crochê; Estilo=Boho','img/v/bl2.jpg'],['Regata Canelada Básica',.5,'Tecido=Canelado','img/v/cm3.jpg']],v:'Tamanho: P, M, G, GG | Cor: Off-white #F2EFE6, Preto #1d1d1f, Rosa #E39BB0'},
+ {re:/camiseta|t-?shirt|\bcamis|roupa/,e:'👕',cat:'moda',t:'',b:['Urbano','Básico & Co','Rota','Algodão Puro'],i:['img/1.jpg','img/v/cm1.jpg','img/v/cm2.jpg','img/v/cm3.jpg','img/v/cm4.jpg'],p:50,c:[['Camiseta Básica 100% Algodão Gola Careca',1,'Material=100% algodão; Modelagem=Regular','img/v/cm1.jpg'],['Camiseta Oversized Estampa Minimalista',1.3,'Material=Algodão fio 30.1; Modelagem=Oversized','img/v/cm2.jpg'],['Camiseta Slim Masculina Malha Penteada',1.1,'Material=Algodão penteado; Modelagem=Slim','img/v/cm3.jpg'],['Camiseta Dry Fit Esportiva',.85,'Material=Poliéster com proteção UV','img/v/cm4.jpg'],['Kit 3 Camisetas Básicas',2.4,'Itens=3 camisetas lisas; Material=Algodão','img/1.jpg']],v:'Tamanho: P, M, G, GG, XG | Cor: Branco #F5F5F2, Preto #1d1d1f, Cinza mescla #9EA3A8, Azul-marinho #1F2A44'},
+ {re:/bone|chapeu/,e:'🧢',cat:'moda',t:'Boné',b:['Rota','Urbano','Aba Reta'],i:['img/5.jpg'],p:40,c:[['Trucker com Tela',1,'Ajuste=Snapback'],['Dad Hat Algodão',.9,'Aba=Curva'],['Bucket Dupla Face',1.2,'Tipo=Bucket']],v:'Cor: Preto #1d1d1f, Branco #F5F5F2, Bege #D9C9A8'},
+ {re:/mochila/,e:'🎒',cat:'acess',t:'Mochila',b:['Rota','Trilho','Norte'],i:['img/42.jpg'],p:120,c:[['para Notebook 15,6" Impermeável',1,'Capacidade=22 L'],['de Viagem Expansível 40 L',1.6,'Capacidade=40 L'],['Escolar com Rodinhas',1.2,'Rodinhas=Sim']],v:'Cor: Preto #1d1d1f, Azul-marinho #1F2A44, Cinza #9EA3A8'},
+ {re:/bolsa|carteira|necessaire/,e:'👜',cat:'moda',t:'Bolsa',b:['Lis','Ateliê Brisa','Nobre'],i:['img/6.jpg'],p:100,c:[['de Mão Couro Sintético',1,'Material=Couro sintético'],['Tote Grande com Zíper',1.3,'Tamanho=Grande'],['Transversal Pequena',.6,'Tamanho=Pequena']],v:'Cor: Preto #1d1d1f, Caramelo #B8734A, Vermelho #C62828'},
+ {re:/oculos/,e:'🕶️',cat:'acess',t:'Óculos de Sol',b:['Rota','Visão','Sol Nascente'],i:['img/41.jpg'],p:80,c:[['Clássico Polarizado UV400',1,'Lente=Polarizada'],['Aviador Metal',1.2,'Armação=Metal'],['Redondo Retrô',.9,'Formato=Redondo']],v:'Cor: Preto #1d1d1f, Tartaruga #6B4226, Dourado #C9A54B'},
+ {re:/\banel|colar\b|brinco|joia|pulseira|alianca/,e:'💍',cat:'acess',t:'',b:['Prata Fina','Lua','Brilho Raro'],i:['img/43.jpg'],p:90,c:[['Anel Prata 925 com Zircônia',1,'Material=Prata 925'],['Colar Ponto de Luz Prata 925',.9,'Material=Prata 925'],['Brinco Argola Folheado a Ouro',.7,'Material=Folheado a ouro 18k']],v:''},
+ {re:/shampoo|cabelo|condicionador|capilar/,e:'🧴',cat:'beleza',t:'',b:['Aurea','Cachos & Cia','Flor de Sal Beauty'],i:['img/54.jpg','img/53.jpg'],p:50,c:[['Shampoo Hidratante 300 ml',.6,'Conteúdo=300 ml'],['Máscara de Reconstrução 250 g',1,'Conteúdo=250 g'],['Óleo Reparador de Pontas 60 ml',.8,'Conteúdo=60 ml']],v:'Tipo de cabelo: Liso, Cacheado, Danificado'},
+ {re:/esmalte|unha/,e:'💅',cat:'beleza',t:'Esmalte',b:['Bem-me-quer','Lua','Unhas de Gala'],i:['img/11.jpg'],p:12,c:[['Cremoso 8 ml',1,'Conteúdo=8 ml'],['Gel sem Cabine 10 ml',1.8,'Conteúdo=10 ml'],['Coleção 6 Cores',4,'Quantidade=6 frascos']],v:'Cor: Vermelho #C62828, Nude #D8B39A, Vinho #5E1A2B, Rosa #E39BB0'},
+ {re:/secador|chapinha|escova|prancha|modelador/,e:'💇',cat:'beleza',t:'Secador de Cabelo',b:['Vento','Aurea','Brisa Pro'],i:['img/10.jpg'],p:150,c:[['Íon 2000 W com Difusor',1,'Potência=2000 W'],['Compacto Dobrável 1200 W',.5,'Potência=1200 W'],['Profissional Motor AC 2400 W',1.7,'Potência=2400 W']],v:'Voltagem: 127 V, 220 V'},
+ {re:/perfume|colonia|body splash/,e:'🌸',cat:'beleza',t:'',b:['Flor de Sal Beauty','Aurea','Essência'],i:['img/7.jpg','img/9.jpg'],p:120,c:[['Perfume Eau de Parfum Floral 100 ml',1.2,'Família=Floral','img/7.jpg'],['Body Splash Frutado 200 ml',.4,'Família=Frutada','img/9.jpg'],['Perfume Eau de Toilette Amadeirado 75 ml',.9,'Família=Amadeirada','img/53.jpg']],v:''},
+ {re:/batom|maquiagem|\bbase\b|creme|hidratante|skincare|serum|protetor solar/,e:'💄',cat:'beleza',t:'',b:['Aurea','Flor de Sal Beauty','Pele Viva'],i:['img/8.jpg','img/9.jpg','img/7.jpg'],p:50,c:[['Hidratante com Ácido Hialurônico 50 g',1,'Conteúdo=50 g'],['Protetor Solar FPS 50 60 g',.9,'FPS=50'],['Sérum Vitamina C 30 ml',1.2,'Conteúdo=30 ml']],v:''},
+ {re:/liquidificador|mixer|processador/,e:'🥤',cat:'casa',t:'Liquidificador',b:['Vida Leve','Cozinha Feliz','Turbo Lar'],i:['img/52.jpg'],p:140,c:[['Turbo 1200 W Copo de Vidro',1,'Potência=1200 W'],['Portátil Recarregável 400 ml',.55,'Bateria=USB-C'],['Alta Potência 1400 W 12 Velocidades',1.4,'Potência=1400 W']],v:'Voltagem: 127 V, 220 V | Cor: Preto #1d1d1f, Vermelho #C62828'},
+ {re:/cafe|cafeteira|capsula/,e:'☕',cat:'mercado',t:'',b:['Brisa Café','Grão Nobre','Serra Alta'],i:['img/40.jpg','img/17.jpg'],p:45,c:[['Café Especial em Grãos 500 g',1,'Peso=500 g','img/40.jpg'],['Café Moído Tradicional 250 g',.4,'Peso=250 g','img/40.jpg'],['Cafeteira Elétrica 30 Xícaras',3.5,'Tipo=Cafeteira','img/17.jpg']],v:''},
+ {re:/maquina de lavar|lavadora|lava e seca|secadora/,e:'🧺',cat:'casa',t:'Máquina de Lavar',b:['Lavita','Casa Viva','Brilho'],i:['img/v/lv1.jpg','img/gen/lavadora.jpg'],p:2000,c:[['12 kg Inverter',1,'Capacidade=12 kg'],['Lava e Seca 11 kg',1.9,'Capacidade=11 kg'],['Tanquinho 10 kg',.35,'Capacidade=10 kg']],v:'Voltagem: 127 V, 220 V | Cor: Branco #F5F5F2, Inox #B8BCC2'},
+ {re:/geladeira|refrigerador|freezer/,e:'🧊',cat:'casa',t:'Geladeira',b:['Frio Bom','Lavita','Polar'],i:['img/v/gl1.jpg','img/v/gl2.jpg','img/gen/cozinha.jpg'],p:3000,c:[['Frost Free Duplex 400 L',1,'Capacidade=400 L','img/v/gl2.jpg'],['Retrô 300 L',1.1,'Estilo=Retrô','img/v/gl1.jpg'],['Side by Side 600 L Inverter',2.6,'Capacidade=600 L','img/v/gl2.jpg']],v:'Voltagem: 127 V, 220 V | Cor: Inox #B8BCC2, Branco #F5F5F2, Verde-água #9ED9CF'},
+ {re:/fryer|fritadeira|forno|fogao|cooktop|micro-?ondas|batedeira|panela|frigideira|cozinha|talher|prato/,e:'🍳',cat:'casa',t:'',b:['Cozinha Feliz','Moro','Vida Leve'],i:['img/gen/cozinha.jpg','img/14.jpg'],p:200,c:[['Air Fryer 5 L Digital',1.3,'Capacidade=5 L'],['Jogo de Panelas Antiaderente 5 Peças',1.1,'Peças=5'],['Batedeira Planetária 600 W',1.6,'Potência=600 W']],v:'Voltagem: 127 V, 220 V'},
+ {re:/sofa/,e:'🛋️',cat:'casa',t:'Sofá',b:['Moro','Conforto Já','Lar Doce'],i:['img/gen/sofa.jpg','img/gen/sala.jpg'],p:1500,c:[['3 Lugares Retrátil e Reclinável',1,'Lugares=3'],['2 Lugares Linho',.7,'Lugares=2'],['de Canto 5 Lugares',1.8,'Lugares=5']],v:'Cor: Cinza #9EA3A8, Bege #D9C9A8, Azul #2E5AAC'},
+ {re:/cadeira|banco|banqueta/,e:'🪑',cat:'casa',t:'Cadeira',b:['Moro','Assento','Lar Doce'],i:['img/gen/banco.jpg'],p:200,c:[['de Escritório Ergonômica',1.6,'Ajuste=Altura e encosto'],['Banqueta Alta Madeira',.6,'Material=Madeira'],['de Jantar Estofada',.8,'Material=Madeira e tecido']],v:'Cor: Preto #1d1d1f, Cinza #9EA3A8, Madeira #A0522D'},
+ {re:/poltrona|\bsala\b|decora|quadro|tapete|cortina|almofada|mesa|estante/,e:'🛋️',cat:'casa',t:'',b:['Moro','Casa Vila','Lar Doce'],i:['img/gen/sala.jpg'],p:180,c:[['Poltrona Decorativa',2,'Tipo=Poltrona'],['Tapete Sala 2 x 1,5 m',1,'Tamanho=2 x 1,5 m'],['Mesa de Centro Madeira',1.3,'Material=Madeira']],v:'Cor: Bege #D9C9A8, Cinza #9EA3A8'},
+ {re:/cama|colchao|travesseiro|lencol|edredom/,e:'🛏️',cat:'casa',t:'',b:['Lar Doce','Sono Bom','Moro'],i:['img/gen/quarto.jpg','img/13.jpg'],p:150,c:[['Jogo de Cama Queen 4 Peças',1,'Peças=4'],['Colchão Casal Molas Ensacadas',6,'Tamanho=Casal'],['Travesseiro Viscoelástico',.6,'Material=Viscoelástico']],v:'Tamanho: Solteiro, Casal, Queen, King'},
+ {re:/luminaria|lampada|abajur|\bluz\b|\bled\b/,e:'💡',cat:'casa',t:'',b:['Moro','Luz & Cia','Casa Vila'],i:['img/12.jpg'],p:90,c:[['Luminária de Piso Articulada',1.7,'Altura=1,55 m'],['Abajur de Mesa Linho',.9,'Altura=45 cm'],['Fita de LED RGB 5 m Wi-Fi',.6,'Comprimento=5 m']],v:'Cor: Preto #1d1d1f, Branco #F5F5F2'},
+ {re:/\bvelas?\b|aromatizador|difusor/,e:'🕯️',cat:'casa',t:'',b:['Essência','Casa Vila','Bem Estar'],i:['img/15.jpg'],p:35,c:[['Vela Aromática 180 g',1,'Peso=180 g'],['Difusor de Varetas 250 ml',1.4,'Conteúdo=250 ml'],['Umidificador Ultrassônico',2.5,'Capacidade=300 ml']],v:'Aroma: Lavanda, Baunilha, Capim-limão'},
+ {re:/planta|flor|jardim|vaso/,e:'🪴',cat:'casa',t:'',b:['Vila Verde','Jardim Fácil','Folha'],i:['img/16.jpg','img/gen/flores.jpg'],p:35,c:[['Suculenta em Vaso 12 cm',.8,'Vaso=12 cm'],['Buquê de Flores do Campo',1.8,'Tipo=Flores frescas'],['Costela-de-Adão 60 cm',2.2,'Altura=60 cm']],v:''},
+ {re:/vinho|cerveja|whisky|espumante/,e:'🍷',cat:'mercado',t:'',b:['Vale Alto','Adega Sul','Serra Gaúcha'],i:['img/gen/vinho.jpg'],p:60,c:[['Vinho Tinto Seco 750 ml',1,'Volume=750 ml'],['Espumante Brut 750 ml',1.2,'Volume=750 ml'],['Cerveja Artesanal IPA Pack 6',.9,'Volume=6 x 355 ml']],v:''},
+ {re:/suco|drink|refrigerante|bebida|cha gelado/,e:'🍹',cat:'mercado',t:'',b:['Folha Fria','Pomar','Fonte Clara'],i:['img/gen/suco.jpg','img/39.jpg'],p:25,c:[['Suco Integral 1 L',1,'Volume=1 L'],['Chá Gelado Pack 6',1.3,'Volume=6 x 330 ml'],['Água com Gás Pack 12',1.1,'Volume=12 x 500 ml']],v:'Sabor: Laranja, Uva, Limão'},
+ {re:/pizza|comida|lanche|hamburguer|sanduiche/,e:'🍕',cat:'mercado',t:'',b:['Forno a Lenha','Sabor da Casa','Cantina'],i:['img/gen/pizza.jpg'],p:50,c:[['Pizza Congelada Margherita 450 g',.6,'Peso=450 g'],['Kit Hambúrguer Artesanal 4 Unidades',1,'Quantidade=4'],['Lasanha Bolonhesa 1 kg',.8,'Peso=1 kg']],v:''},
+ {re:/\bbolos?\b|\bdoces?\b|torta|brigadeiro/,e:'🎂',cat:'mercado',t:'',b:['Doce Lar','Confeitaria Mel','Sítio Bom'],i:['img/gen/bolo.jpg'],p:60,c:[['Bolo de Chocolate 1,2 kg',1,'Peso=1,2 kg'],['Caixa com 20 Brigadeiros',.7,'Quantidade=20'],['Torta de Limão 1 kg',.9,'Peso=1 kg']],v:''},
+ {re:/chocolate|bombom/,e:'🍫',cat:'mercado',t:'Chocolate',b:['Cacau Raiz','Doce Lar','Bean to Bar'],i:['img/38.jpg'],p:25,c:[['70% Cacau 100 g',1,'Peso=100 g'],['Caixa de Bombons 250 g',1.6,'Peso=250 g'],['Barra ao Leite 200 g',.9,'Peso=200 g']],v:''},
+ {re:/fruta|banana|\bmacas?\b|\buvas?\b/,e:'🍌',cat:'mercado',t:'',b:['Pomar','Sítio Bom','Hortifruti Já'],i:['img/gen/fruta.jpg'],p:30,c:[['Cesta de Frutas da Estação',1,'Peso=3 kg'],['Banana Prata 1 kg',.25,'Peso=1 kg'],['Uva sem Semente 500 g',.4,'Peso=500 g']],v:''},
+ {re:/violao|guitarra|ukulele|instrumento|baixo|teclado musical/,e:'🎸',cat:'brinq',t:'',b:['Acorde','Som Livre','Cordas & Cia'],i:['img/gen/violao.jpg'],p:500,c:[['Violão Folk Elétrico',1,'Captação=Ativa'],['Ukulele Soprano',.35,'Tamanho=Soprano'],['Guitarra Stratocaster com Amplificador',2,'Inclui=Amplificador 10 W']],v:'Cor: Natural #C9A26B, Preto #1d1d1f'},
+ {re:/\bbolas?\b|futebol|chuteira/,e:'⚽',cat:'esporte',t:'',b:['Gol de Placa','Craque','Várzea'],i:['img/29.jpg'],p:80,c:[['Bola de Campo Tamanho 5',1,'Tamanho=5'],['Chuteira Society',2.2,'Tipo=Society'],['Bola de Futsal',.8,'Uso=Futsal']],v:''},
+ {re:/bicicleta|bike/,e:'🚲',cat:'esporte',t:'Bicicleta',b:['Pedal Livre','Trilho','Roda Viva'],i:['img/28.jpg'],p:1200,c:[['Urbana Aro 700',1,'Aro=700c'],['Mountain Bike Aro 29 21 Marchas',1.3,'Aro=29'],['Elétrica 350 W',4,'Motor=350 W']],v:'Tamanho do quadro: P, M, G'},
+ {re:/creatina|whey|suplemento|proteina/,e:'💪',cat:'esporte',t:'',b:['Vigor Nutri','Forma','Pura Força'],i:['img/46.jpg'],p:90,c:[['Creatina Monohidratada 300 g',1,'Peso=300 g'],['Whey Protein Concentrado 900 g',1.6,'Peso=900 g'],['Pré-Treino 300 g',.9,'Peso=300 g']],v:'Sabor: Sem sabor, Chocolate, Baunilha'},
+ {re:/academia|treino|halter|fitness|yoga|esteira|legging/,e:'🏋️',cat:'esporte',t:'',b:['Movi Fit','Ritmo','Forma'],i:['img/gen/fitness.jpg','img/27.jpg','img/25.jpg','img/47.jpg'],p:90,c:[['Par de Halteres 5 kg',1,'Peso=2 x 5 kg','img/27.jpg'],['Tapete de Yoga 6 mm',.7,'Espessura=6 mm','img/25.jpg'],['Esteira Elétrica Dobrável',18,'Velocidade=Até 12 km/h','img/gen/fitness.jpg'],['Conjunto Legging e Top',.9,'Tecido=Poliamida','img/47.jpg']],v:''},
+ {re:/cachorro|\bcao\b|racao|coleira/,e:'🐶',cat:'pets',t:'',b:['PetLar','Patinha','Au Au'],i:['img/30.jpg','img/32.jpg'],p:60,c:[['Ração Premium Adulto 10 kg',2.5,'Peso=10 kg'],['Cama Pet Lavável',1.2,'Tamanho=M'],['Coleira com Guia Refletiva',.5,'Material=Nylon']],v:'Tamanho: P, M, G'},
+ {re:/gato|arranhador/,e:'🐱',cat:'pets',t:'',b:['Patinha','PetLar','Miau'],i:['img/31.jpg'],p:60,c:[['Arranhador com Toca 3 Andares',2.5,'Altura=90 cm','img/31.jpg'],['Fonte de Água 2 L',1.3,'Capacidade=2 L'],['Varinha com Penas',.35,'Comprimento=60 cm']],v:''},
+ {re:/\bpets?\b/,e:'🐾',cat:'pets',t:'',b:['PetLar','Patinha'],i:['img/32.jpg','img/30.jpg'],p:50,c:[['Cama Lavável',1,'Tamanho=M'],['Comedouro Duplo Inox',.6,'Material=Inox'],['Brinquedo Mordedor',.4,'Material=Borracha','img/32.jpg']],v:''},
+ {re:/pelucia|\bursos?\b/,e:'🧸',cat:'brinq',t:'',b:['Toca','Mundo Bolinha','Abraço'],i:['img/34.jpg'],p:70,c:[['Urso de Pelúcia 40 cm',1,'Altura=40 cm'],['Urso de Pelúcia Gigante 1 m',3,'Altura=1 m'],['Coelho de Pelúcia 30 cm',.7,'Altura=30 cm']],v:'Cor: Mel #C99A5B, Branco #F5F5F2, Rosa #E8B4C0'},
+ {re:/lego|bloco|brinquedo|boneca|jogo/,e:'🧸',cat:'brinq',t:'',b:['Mundo Bolinha','Toca','Lúdica'],i:['img/33.jpg','img/35.jpg'],p:90,c:[['Blocos de Montar 500 Peças',1,'Peças=500','img/33.jpg'],['Jogo de Tabuleiro Família',1.1,'Jogadores=2 a 6','img/35.jpg'],['Boneca Articulada com Acessórios',.8,'Idade=3+']],v:''},
+ {re:/carrinho|miniatura|\bcarro\b|\bmotos?\b/,e:'🚗',cat:'brinq',t:'',b:['Garagem Clássica','Pista','Roda Viva'],i:['img/36.jpg'],p:120,c:[['Carro Clássico 1:24 Metal',1,'Escala=1:24'],['Carrinho de Controle Remoto 4x4',1.5,'Alcance=50 m'],['Moto Esportiva 1:12',.8,'Escala=1:12']],v:'Cor: Vermelho #C62828, Azul #2E5AAC, Amarelo #F2C230'}];
+const FAM_GENERIC={e:'🎁',cat:'casa',b:['Bem Feito','Útil & Cia','Casa Vila','Nobre','Moro'],i:['img/gen/presente.jpg'],p:80,c:[['Modelo Clássico',1,'Modelo=Clássico'],['Modelo Compacto',.7,'Modelo=Compacto'],['Tamanho Grande',1.5,'Tamanho=Grande'],['Edição Limitada',1.8,'Edição=Limitada']],v:''};
+const famFor=t=>FAM.find(f=>f.re.test(norm(t)));
+function photoFor(t){const f=famFor(t);return f?f.i[0]:'img/gen/presente.jpg'}
+let GEN=load('cm_gen',[]).filter(p=>p.v2);
 function hashStr(t){let h=2166136261;for(const c of t){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0}
 function cap(t){return t.replace(/\s+/g,' ').trim().replace(/^./,c=>c.toUpperCase())}
-function genFor(q){const t=norm(q).slice(0,40);if(t.length<2)return [];const h=hashStr(t);const m=GEN_MAP.find(([re])=>re.test(t));const e=m?m[1]:'🎁',cat=m?m[2]:'casa',img=m?m[3]:'img/gen/presente.jpg';
- const base=20+(h%480);const nm=cap(String(q).slice(0,40));
- const vars=[[nm,1],[nm+' Premium',1.8],['Kit '+nm.toLowerCase()+' completo',2.4],[nm+' compacto',.7]];
- return vars.map(([n,k],i)=>{const id=900000+((h+i*7919)%90000);const price=Math.round(base*k)+.9;return {id,name:n,cat,price,old:Math.round(price*1.7)+.9,e,h:h%360,rate:4.5+((h>>>i)%5)/10,sold:300+((h>>>(i+3))%9000),tag:'Achado',gen:true,img}})}
+const ends9=x=>Math.max(9.9,Math.floor(x/10)*10+9.9);
+const OFFS=[8,12,15,18,22,25,30,35,40,45];
+function genFor(q){const t=norm(q).slice(0,40);if(t.length<2)return [];const h=hashStr(t);const f=famFor(t);const F=f||FAM_GENERIC;const tp=f?f.t:cap(String(q).slice(0,40));
+ const n=Math.min(6,F.c.length);
+ return Array.from({length:n},(_,i)=>{const hh=hashStr(t+'#'+i);const cfg=F.c[i];const brand=F.b[(h+i)%F.b.length];
+  const model=f&&F.t?['','',String.fromCharCode(65+hh%6)+(2+hh%9),String(10+hh%80),['Lite','Max','Neo','Go','Air','One'][hh%6]][hh%5]:'';
+  const base=F.p*(0.85+(h%30)/100)*cfg[1];const price=ends9(base);const off=OFFS[hh%OFFS.length];
+  const name=F.t||!f?[tp,brand,model,cfg[0]].filter(Boolean).join(' '):cfg[0]+' '+brand;
+  return {id:900000+((h+i*7919)%90000),name,cat:F.cat,price,old:ends9(price/(1-off/100)),e:F.e,h:hh%360,rate:Math.round((4.3+(hh>>>3)%7/10)*10)/10,sold:40+((hh>>>5)%14000),tag:i===0?'Achado':'',gen:true,v2:true,img:cfg[3]||F.i[(h+i)%F.i.length],brand,spec:cfg[2],vars:F.v}})}
 function addGen(items){items.forEach(p=>{if(!P.some(x=>x.id===p.id)){P.push(p);GEN.push(p)}});GEN=GEN.slice(-60);save('cm_gen',GEN)}
-GEN.forEach(p=>{p.img=photoFor(p.name);if(!P.some(x=>x.id===p.id))P.push(p)});
+GEN.forEach(p=>{if(!P.some(x=>x.id===p.id))P.push(p)});
 S.cart=S.cart.filter(c=>P.some(p=>p.id===c.id));
 function list(){let l=P.filter(p=>!p.gen);if(S.cat==='alta')l=l.filter(p=>p.hot);else if(S.cat==='bf')l=l.filter(p=>p.bf).sort((a,b)=>b.bf-a.bf);else if(S.cat!=='all')l=l.filter(p=>p.cat===S.cat);
- if(S.q){const t=norm(S.q),words=t.split(/\s+/).filter(w=>w.length>1);
-  let r=l.filter(p=>norm(p.name).includes(t));
-  if(!r.length&&words.length)r=l.filter(p=>words.every(w=>norm(p.name).includes(w)));
-  if(r.length<2){const g=genFor(S.q);addGen(g);r=r.concat(g.map(x=>byId(x.id)).filter(Boolean))}
+ if(S.q){const t=norm(S.q),words=t.split(/\s+/).filter(w=>w.length>1);const f=famFor(t);const txt=p=>norm(p.name+' '+(p.brand||''));
+  let r=l.filter(p=>txt(p).includes(t)||(f&&famFor(p.name)===f));
+  if(!r.length&&words.length)r=l.filter(p=>words.every(w=>txt(p).includes(w)));
+  if(r.length<4){const g=genFor(S.q);addGen(g);const gg=g.map(x=>byId(x.id)).filter(Boolean);r=r.concat(gg.filter(p=>norm(p.name).includes(t)),gg.filter(p=>!norm(p.name).includes(t)))}
   l=r}
  return l}
+// variações, ficha técnica e loja de cada produto
+function parseVars(s){if(!s)return [];return s.split(' | ').map(g=>{const k=g.indexOf(': ');return {l:g.slice(0,k),o:g.slice(k+2).split(', ').map(x=>{const o={n:x,c:'',p:0,i:''};o.n=o.n.replace(/ @(\S+)/,(_,m)=>{o.i=m;return ''}).replace(/ #([0-9a-fA-F]{6})/,(_,m)=>{o.c='#'+m;return ''}).replace(/ ([+-]\d+)$/,(_,m)=>{o.p=+m;return ''}).trim();return o})}})}
+function parseSpec(s){return s?s.split('; ').filter(x=>x.includes('=')).map(x=>{const k=x.indexOf('=');return [x.slice(0,k),x.slice(k+1)]}):[]}
+const INFO=new Map();
+function infoOf(p){if(INFO.has(p.id))return INFO.get(p.id);const f=famFor(p.name),F=f||FAM_GENERIC;const brand=p.brand||F.b[hashStr(p.name)%F.b.length];
+ let V=parseVars(p.vars!=null?p.vars:F.v);if(!V.length&&p.vars==null&&OPTS[p.cat])V=[{l:OPTS[p.cat].l,o:OPTS[p.cat].v.map(n=>({n,c:'',p:0,i:''}))}];
+ const spec=[['Marca',brand+' (fictícia)'],...parseSpec(p.spec||(f?'':''))];const I={brand,V,spec};INFO.set(p.id,I);return I}
+const unit=c=>byId(c.id).price+(c.pd||0);
+const unitOld=c=>{const p=byId(c.id);return p.old+(c.pd||0)*p.old/p.price};
+const parc=v=>{const n=Math.min(12,Math.floor(v/30));return n>=2?`${n}x de ${brl(v/n)} sem juros`:''};
+const REV=[['Marina S.',5,'Muito bonito, acabamento caprichado. Igualzinho às fotos.'],['Rafael T.',5,'Ótimo custo-benefício, superou o que eu esperava.'],['Juliana M.',4,'Gostei bastante. Só achei a embalagem simples.'],['Carlos A.',5,'Qualidade excelente, já quero comprar outro (de mentirinha).'],['Bianca R.',5,'A cor é linda e o material é firme. Recomendo!'],['Pedro H.',4,'Bom produto, faz o que promete.'],['Lúcia F.',5,'Comprei para dar de presente e amei a experiência.'],['Thiago N.',5,'Vendedor atencioso e produto bem descrito.'],['Ana C.',4,'Muito bom pelo preço. Daria 5 se tivesse mais cores.']];
+function fdate(d){return d.toLocaleDateString('pt-BR',{weekday:'short',day:'numeric',month:'short'})}
+function sheetCalc(){const p=byId(sheet.id),I=infoOf(p);const os=I.V.map((g,k)=>g.o[sheet.sel[k]]);sheet.pd=os.reduce((a,o)=>a+o.p,0);sheet.opt=os.map(o=>o.n).join(' · ');const wi=[...os].reverse().find(o=>o.i);sheet.img=wi?wi.i:(p.img||'img/'+p.id+'.jpg');return {p,I}}
+function updSheet(){const {p}=sheetCalc();const c={id:p.id,pd:sheet.pd};const pr=$('#spr');if(pr)pr.innerHTML=`${brl(unit(c))}<s>${brl(unitOld(c))}</s>`;const pi=$('#sinst');if(pi)pi.textContent=parc(unit(c));
+ sheet.sel.forEach((j,k)=>{const l=document.querySelector(`[data-gl="${k}"]`);if(l)l.textContent=infoOf(p).V[k].o[j].n});const im=$('.sheet .ph img');if(im&&!im.src.endsWith(sheet.img))im.src=sheet.img}
+
 
 const ADS=[
  {b:'Brisa Café',t:'Torra fresca toda semana',d:'Grãos especiais com 30% off na primeira compra de mentirinha.',c:'mercado',img:'img/40.jpg',k:'a1'},
@@ -552,12 +649,12 @@ function cartView(){
  if(!S.cart.length)return `<div class="sec-h"><h2>Carrinho</h2></div><div class="empty"><strong>Seu carrinho está vazio</strong>Escolha algo que te faça sorrir. Aqui nada é cobrado.<br><br><button class="btn btn-main" data-go="home">Explorar produtos</button></div>`;
  const t=totals(S.cart);
  return `<div class="sec-h"><h2>Carrinho</h2><small class="num">${cartCount()} itens</small></div>
- <div class="two"><div class="panel">${S.cart.map((c,i)=>{const p=byId(c.id);return `<div class="line">${ph(p)}<div style="min-width:0"><h4>${esc(p.name)}</h4>${c.opt?`<div class="v">${c.opt}</div>`:''}
-  <div class="row"><span class="pr num">${brl(p.price*c.q)}</span><span class="qty"><button data-dec="${i}" aria-label="Diminuir">−</button><output class="num">${c.q}</output><button data-inc="${i}" aria-label="Aumentar">+</button></span><button class="rm" data-rm="${i}">Remover</button></div></div></div>`}).join('')}</div>
+ <div class="two"><div class="panel">${S.cart.map((c,i)=>{const p=byId(c.id);return `<div class="line">${ph({...p,img:c.img||p.img})}<div style="min-width:0"><h4>${esc(p.name)}</h4>${c.opt?`<div class="v">${c.opt}</div>`:''}
+  <div class="row"><span class="pr num">${brl(unit(c)*c.q)}</span><span class="qty"><button data-dec="${i}" aria-label="Diminuir">−</button><output class="num">${c.q}</output><button data-inc="${i}" aria-label="Aumentar">+</button></span><button class="rm" data-rm="${i}">Remover</button></div></div></div>`}).join('')}</div>
  <div class="panel sum">${t.sub<49.9?`<div class="shipbar"><span>Faltam <b class="num">${brl(49.9-t.sub)}</b> para o frete grátis imaginário</span><div class="bar"><i style="width:${Math.round(t.sub/49.9*100)}%"></i></div></div>`:`<div class="shipbar"><span class="green">🎉 Você ganhou frete grátis imaginário!</span><div class="bar"><i style="width:100%"></i></div></div>`}${sumRows(t)}<button class="btn btn-main" data-checkout="cart" style="margin-top:6px">Finalizar compra</button>
  <div class="note">${infoIco}<span>Na próxima tela você escolhe a forma de pagamento e a compra já é concluída. Nenhum valor é cobrado.</span></div></div></div>`;
 }
-function totals(items,cp){const sub=items.reduce((a,c)=>a+byId(c.id).price*c.q,0);const old=items.reduce((a,c)=>a+byId(c.id).old*c.q,0);let ship=sub>=49.9||!sub?0:12.9;const disc=cp&&cp.pct?Math.round(sub*cp.pct)/100:0;const shipOff=cp&&cp.ship?ship:0;ship-=shipOff;return{sub,old,ship,disc,cp:cp||null,total:sub-disc+ship,save:old-sub+disc+shipOff}}
+function totals(items,cp){const sub=items.reduce((a,c)=>a+unit(c)*c.q,0);const old=items.reduce((a,c)=>a+unitOld(c)*c.q,0);let ship=sub>=49.9||!sub?0:12.9;const disc=cp&&cp.pct?Math.round(sub*cp.pct)/100:0;const shipOff=cp&&cp.ship?ship:0;ship-=shipOff;return{sub,old,ship,disc,cp:cp||null,total:sub-disc+ship,save:old-sub+disc+shipOff}}
 // cupons (fictícios): públicos + carteira do visitante
 const PUBLIC_CP={BEMVINDO10:{pct:10,label:'10% de boas-vindas'},COMPRO20:{pct:20,label:'20% em tudo'},FRETEGRATIS:{ship:1,label:'Frete grátis'}};
 S.wallet=load('cm_wallet',[]);S.coupon=null;S.mil=load('cm_mil',0);
@@ -565,7 +662,7 @@ function saveWallet(){save('cm_wallet',S.wallet)}
 function giveCoupon(code,pct,ship,label,why){if(S.wallet.some(w=>w.code===code))return false;S.wallet.unshift({code,pct:pct||0,ship:ship||0,label,why,used:false,d:Date.now()});saveWallet();return true}
 function findCoupon(code){code=String(code||'').trim().toUpperCase();if(!code)return null;const w=S.wallet.find(x=>x.code===code&&!x.used);if(w)return{...w};const p=PUBLIC_CP[code];return p?{code,pct:p.pct||0,ship:p.ship||0,label:p.label}:null}
 const rnd=()=>Math.random().toString(36).slice(2,6).toUpperCase();
-function checkMilestone(){const sub=S.cart.reduce((a,c)=>a+byId(c.id).price*c.q,0);const k=Math.floor(sub/1000);
+function checkMilestone(){const sub=S.cart.reduce((a,c)=>a+unit(c)*c.q,0);const k=Math.floor(sub/1000);
  if(!S.cart.length&&S.mil){S.mil=0;save('cm_mil',0);return}
  if(k>S.mil){for(let i=S.mil+1;i<=k;i++){giveCoupon('MIL'+i+'-'+rnd(),15,0,'15% por chegar a '+brl(i*1000)+' no carrinho','carrinho')}S.mil=k;save('cm_mil',k);
   setTimeout(()=>{toast('🎟️ Você passou de '+brl(k*1000)+' no carrinho e ganhou um cupom de 15%!');sfx.gift();confetti()},900)}}
@@ -589,7 +686,7 @@ function checkoutView(){
  <div class="sec-h"><h2>Finalizar compra</h2></div>
  <div class="two"><div class="stack">
   <div class="panel" id="addrPanel">${addrPanel()}</div>
-  <div class="panel"><p class="h3">Itens (${items.reduce((a,c)=>a+c.q,0)})</p>${items.map(c=>{const p=byId(c.id);return `<div class="line">${ph(p)}<div style="min-width:0"><h4>${esc(p.name)}</h4><div class="v num">${c.opt?c.opt+' · ':''}${c.q} × ${brl(p.price)}</div></div></div>`}).join('')}</div>
+  <div class="panel"><p class="h3">Itens (${items.reduce((a,c)=>a+c.q,0)})</p>${items.map(c=>{const p=byId(c.id);return `<div class="line">${ph({...p,img:c.img||p.img})}<div style="min-width:0"><h4>${esc(p.name)}</h4><div class="v num">${c.opt?c.opt+' · ':''}${c.q} × ${brl(unit(c))}</div></div></div>`}).join('')}</div>
  </div>
  <div class="stack"><div class="panel">${couponPanel()}</div><div class="panel sum">${sumRows(t)}</div>
   <div class="panel"><p class="h3">Escolha como pagar</p>
@@ -646,7 +743,7 @@ function successView(){
 function ordersView(){
  if(!S.orders.length)return `<div class="sec-h"><h2>Meus pedidos</h2></div><div class="empty"><strong>Nenhum pedido ainda</strong>Quando você concluir uma compra simulada, ela aparece aqui.<br><br><button class="btn btn-main" data-go="home">Começar a comprar</button></div>`;
  const all=S.orders.reduce((a,o)=>a+o.total,0);
- const L=lvlOf(COINS);return `<div class="sec-h"><h2>Meus pedidos</h2><small class="num">${S.orders.length} pedidos · ${brl(all)} em compras simuladas · R$ 0,00 cobrado</small></div>
+ const L=lvlOf(COINS);return `<div class="sec-h"><h2>Meus pedidos</h2><small class="num">${S.orders.length} ${S.orders.length===1?'pedido':'pedidos'} · ${brl(all)} em compras simuladas · R$ 0,00 cobrado</small></div>
  <div class="coins"><div class="row1"><span><b class="big num">${COINS.toLocaleString('pt-BR')}</b> moedas Comprô</span><small>Nível: ${LEVELS[L.i]}</small></div><div class="lvl"><i style="width:${L.p}%"></i></div></div>
  <div class="panel refbox" style="margin-bottom:12px"><p class="h3">Indique um amigo</p><p class="fhint">Quem chegar pelo seu link ganha um cupom de 15% na hora.</p><div class="cpform"><input id="refIn" readonly value="${refLink()}" aria-label="Seu link de indicação"><button class="btn btn-alt sm" data-refcopy>Copiar</button></div></div>
  ${S.wallet.length?`<div class="panel" style="margin-bottom:12px"><p class="h3">Seus cupons</p><div class="cplist">${S.wallet.map(w=>`<div class="cpchip ${w.used?'used':''}"><b>${w.pct?w.pct+'% OFF':'Frete grátis'}</b><small>${esc(w.code)} · ${esc(w.label)}${w.used?' · usado':''}</small></div>`).join('')}</div></div>`:''}
@@ -673,15 +770,21 @@ function go(v){S.view=v;render();window.scrollTo({top:0})}
 // folha do produto
 let sheet=null;
 function openProduct(id){
- const p=byId(id);const o=OPTS[p.cat];sheet={id:p.id,q:1,opt:o?o.v[0]:''};
+ const p=byId(id);const I=infoOf(p);sheet={id:p.id,q:1,sel:I.V.map(()=>0)};sheetCalc();const c={id:p.id,pd:sheet.pd};
+ const hh=hashStr(String(p.id)),revN=Math.max(12,Math.round(p.sold*(.12+(hh%9)/100))),revs=[0,1,2].map(k=>REV[(hh+k*4)%REV.length]);
+ const d1=new Date(Date.now()+864e5*(2+hh%3)),d2=new Date(d1.getTime()+864e5*(2+hh%2));const free=p.price>=49.9;
  $('#layer').innerHTML=`<div class="scrim" data-close><div class="sheet" role="dialog" aria-modal="true" aria-label="${esc(p.name)}" style="position:relative">
-  <button class="sheet-x" data-close aria-label="Fechar">×</button>${ph(p,`<b class="off num">-${pct(p)}%</b>`)}
-  <div class="sb"><div class="pr num">${brl(p.price)}<s>${brl(p.old)}</s></div><h3>${esc(p.name)}</h3>
-  <div class="meta num"><span class="st">★★★★★</span>${p.rate.toLocaleString('pt-BR')} · ${kfmt(p.sold)} vendidos · Loja Shop Comprô Oficial</div>
-  ${o?`<div><div class="opt-l">${o.l}</div><div class="opts">${o.v.map((x,i)=>`<button class="opt" data-opt="${x}" aria-pressed="${!i}">${x}</button>`).join('')}</div></div>`:''}
+  <button class="sheet-x" data-close aria-label="Fechar">×</button>${ph({...p,img:sheet.img},`${pct(p)>=5?`<b class="off num">-${pct(p)}%</b>`:''}`)}
+  <div class="sb"><div><div class="pr num" id="spr">${brl(unit(c))}<s>${brl(unitOld(c))}</s></div><div class="inst num" id="sinst">${parc(unit(c))}</div></div><h3>${esc(p.name)}</h3>
+  <div class="meta num"><span class="st">★★★★★</span>${p.rate.toLocaleString('pt-BR')} · ${kfmt(revN)} avaliações · ${kfmt(p.sold)} vendidos</div>
+  <div class="seller"><span class="slogo" style="--h:${p.h}" aria-hidden="true">${esc(I.brand[0])}</span><div><b>Loja oficial ${esc(I.brand)}</b><small class="num">Marca fictícia · ${95+hh%5}% de avaliações positivas</small></div><span class="ok">✓ Oficial</span></div>
+  ${I.V.map((g,k)=>`<div><div class="opt-l">${esc(g.l)}: <b data-gl="${k}">${esc(g.o[0].n)}</b></div><div class="opts">${g.o.map((o,j)=>`<button class="opt${o.c?' sw':''}" data-opt="${k}:${j}" aria-pressed="${!j}">${o.c?`<i style="background:${o.c}" aria-hidden="true"></i>`:''}${esc(o.n)}${o.p?`<small class="num">${o.p>0?'+':'−'} ${brl(Math.abs(o.p))}</small>`:''}</button>`).join('')}</div></div>`).join('')}
   <div><div class="opt-l">Quantidade</div><span class="qty"><button data-sq="-1" aria-label="Diminuir">−</button><output class="num" id="sq">1</output><button data-sq="1" aria-label="Aumentar">+</button></span></div>
+  <div class="ship"><span aria-hidden="true">🚚</span><span><b>${free?'Frete grátis':'Frete R$ 12,90'}</b> · chega entre ${fdate(d1)} e ${fdate(d2)} <small>(entrega imaginária: nada é enviado)</small></span></div>
   <div class="sheet-actions"><button class="btn btn-alt" data-add>Adicionar ao carrinho</button><button class="btn btn-main" data-buy>Comprar agora</button></div>
-  <div class="note">${infoIco}<span>Produto fictício. A compra é só uma experiência: nada é cobrado e nada é entregue.</span></div></div></div></div>`;
+  ${I.spec.length?`<div><p class="h3" style="margin:4px 0 8px">Ficha técnica</p><table class="spec">${I.spec.map(([k,v])=>`<tr><th>${esc(k)}</th><td>${esc(v)}</td></tr>`).join('')}</table></div>`:''}
+  <div><p class="h3" style="margin:4px 0 8px">Avaliações <small class="num" style="font-weight:400;color:var(--muted)">${p.rate.toLocaleString('pt-BR')} de 5 · ${kfmt(revN)} (de mentirinha)</small></p>${revs.map(r=>`<div class="rev"><b>${r[0]}</b> <span class="st">${'★'.repeat(r[1])}${'☆'.repeat(5-r[1])}</span><p>${r[2]}</p></div>`).join('')}</div>
+  <div class="note">${infoIco}<span>Produto e marca fictícios. A compra é só uma experiência: nada é cobrado e nada é entregue.</span></div></div></div></div>`;
  document.body.style.overflow='hidden';
  setTimeout(()=>{const b=$('.sheet [data-add]');b&&b.focus({preventScroll:true})},50);
 }
@@ -718,12 +821,12 @@ const STAGES=['Confirmado','Separando','A caminho da imaginação','Entregue na 
 function stageOf(o){const m=(Date.now()-o.d)/60000;return m<1?0:m<3?1:m<10?2:3}
 function trackHtml(o){const st=stageOf(o);return `<div class="track">${STAGES.map((n,i)=>`<div class="${i<=st?'on':''} ${i===st&&st<3?'now':''}"><i>${i<st||st===3?'✓':i+1}</i>${n}</div>`).join('')}</div><p class="trnote">Rastreio de mentirinha: nenhum produto sai de lugar nenhum.</p>`}
 
-function addToCart(id,q,opt){const f=S.cart.find(c=>c.id===id&&c.opt===opt);f?f.q+=q:S.cart.push({id,q,opt});persist()}
+function addToCart(id,q,opt,pd,img){const f=S.cart.find(c=>c.id===id&&c.opt===opt);f?f.q+=q:S.cart.push({id,q,opt,pd:pd||0,img:img||''});persist()}
 
 function complete(payId){
  const m=PAYS.find(x=>x.id===payId);const items=S.checkout.items;const t=totals(items,S.coupon);
  if(S.addrMode==='form'){const e=$('#aerr');if(e){e.hidden=false;e.scrollIntoView({behavior:'smooth',block:'center'})}toast('Salve o endereço ou escolha pular esta etapa');return}
- const o={n:'CP'+Date.now().toString(36).toUpperCase().slice(-6),d:Date.now(),items:items.map(c=>{const p=byId(c.id);return {...c,snap:{name:p.name,e:p.e,h:p.h,img:p.img||'img/'+p.id+'.jpg',id:p.id}}}),total:t.total,pay:m.n,addr:!!(S.addrMode==='saved'&&S.addr),coupon:t.cp?t.cp.code:null,disc:t.disc};
+ const o={n:'CP'+Date.now().toString(36).toUpperCase().slice(-6),d:Date.now(),items:items.map(c=>{const p=byId(c.id);return {...c,snap:{name:p.name,e:p.e,h:p.h,img:c.img||p.img||'img/'+p.id+'.jpg',id:p.id}}}),total:t.total,pay:m.n,addr:!!(S.addrMode==='saved'&&S.addr),coupon:t.cp?t.cp.code:null,disc:t.disc};
  if(t.cp){const w=S.wallet.find(x=>x.code===t.cp.code);if(w){w.used=true;saveWallet()}}S.coupon=null;
  track('purchase',{items:o.items.map(c=>({n:(c.snap&&c.snap.name)||'',q:c.q})),total:o.total});
  o.coins=Math.max(10,Math.round(o.total));o.coinsBefore=COINS;COINS+=o.coins;save('cm_coins',COINS);
@@ -756,10 +859,10 @@ document.addEventListener('click',e=>{
  if(d.cat){S.cat=d.cat;S.q='';$('#q').value='';closeLayer();go('home');const c=$('#cats [aria-pressed="true"]');c&&c.scrollIntoView({inline:'center',block:'nearest'});return}
  if(d.clear!==undefined){S.cat='all';S.q='';$('#q').value='';render();return}
  if(d.open){openProduct(d.open);return}
- if(d.opt&&sheet){sheet.opt=d.opt;t.parentElement.querySelectorAll('.opt').forEach(b=>b.setAttribute('aria-pressed',String(b===t)));return}
+ if(d.opt&&sheet){const [k,j]=d.opt.split(':').map(Number);sheet.sel[k]=j;t.parentElement.querySelectorAll('.opt').forEach(b=>b.setAttribute('aria-pressed',String(b===t)));updSheet();sfx.tap();return}
  if(d.sq&&sheet){sheet.q=Math.min(20,Math.max(1,sheet.q+ +d.sq));$('#sq').textContent=sheet.q;return}
- if(d.add!==undefined&&sheet){const p=byId(sheet.id);const im=$('.sheet .ph img');const clone=im&&im.complete&&im.naturalWidth?im:null;const rect=clone?clone.getBoundingClientRect():null;addToCart(sheet.id,sheet.q,sheet.opt);sfx.pop();if(clone){const tmp=document.createElement('img');tmp.src=clone.src;Object.assign(tmp.style,{position:'fixed',left:rect.left+'px',top:rect.top+'px',width:rect.width+'px',height:rect.height+'px',opacity:0});document.body.appendChild(tmp);closeLayer();flyToCart(tmp);setTimeout(()=>tmp.remove(),900)}else{closeLayer();bumpCart()}toast('Adicionado ao carrinho',p.img||'img/'+p.id+'.jpg');if(S.view==='cart')render();return}
- if(d.buy!==undefined&&sheet){S.checkout={src:'now',items:[{id:sheet.id,q:sheet.q,opt:sheet.opt}]};closeLayer();go('checkout');return}
+ if(d.add!==undefined&&sheet){const p=byId(sheet.id);const im=$('.sheet .ph img');const clone=im&&im.complete&&im.naturalWidth?im:null;const rect=clone?clone.getBoundingClientRect():null;addToCart(sheet.id,sheet.q,sheet.opt,sheet.pd,sheet.img);sfx.pop();if(clone){const tmp=document.createElement('img');tmp.src=clone.src;Object.assign(tmp.style,{position:'fixed',left:rect.left+'px',top:rect.top+'px',width:rect.width+'px',height:rect.height+'px',opacity:0});document.body.appendChild(tmp);closeLayer();flyToCart(tmp);setTimeout(()=>tmp.remove(),900)}else{closeLayer();bumpCart()}toast('Adicionado ao carrinho',sheet&&sheet.img||p.img||'img/'+p.id+'.jpg');if(S.view==='cart')render();return}
+ if(d.buy!==undefined&&sheet){S.checkout={src:'now',items:[{id:sheet.id,q:sheet.q,opt:sheet.opt,pd:sheet.pd,img:sheet.img}]};closeLayer();go('checkout');return}
  if(d.inc){S.cart[+d.inc].q=Math.min(20,S.cart[+d.inc].q+1);persist();render();return}
  if(d.dec){const c=S.cart[+d.dec];c.q>1?c.q--:S.cart.splice(+d.dec,1);persist();render();return}
  if(d.rm){S.cart.splice(+d.rm,1);persist();render();return}
