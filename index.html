@@ -88,7 +88,7 @@ section{margin-bottom:22px}
 .adtag{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:700;opacity:.75}
 .adwide{width:100%;margin-bottom:22px}
 .a1{background:#3B2416;color:#F7E7D4}.a2{background:#1E2A4A;color:#E3E9FF}.a3{background:#DDEFD9;color:#1F3A1C}
-.a4{background:#FF7A45;color:#2B1206}.a5{background:#FFE3A3;color:#3A2A00}.a6{background:#F4D4DE;color:#4A1426}
+.a4{background:#9DE3D8;color:#0B3B34}.a5{background:#FFE3A3;color:#3A2A00}.a6{background:#F4D4DE;color:#4A1426}
 @media (min-width:900px){.adban{padding-right:30%;min-height:170px}.adban img{width:30%}.adtxt{padding:22px 28px}.adtxt b{font-size:26px}}
 .bf{background:#0E0E10;color:#F5F5F5;border-radius:18px;padding:16px;margin-bottom:22px;display:grid;gap:12px;box-shadow:var(--shadow)}
 .bf-top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-end}
@@ -309,6 +309,7 @@ footer .wrap{padding-block:18px 8px}
 .welcome li i{flex:none;width:24px;height:24px;border-radius:50%;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;font-style:normal;font-weight:800;font-size:13px}
 .wbadge{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;background:var(--sun);color:var(--sun-ink);border-radius:999px;padding:4px 12px 4px 6px;font-size:12px;text-transform:uppercase;letter-spacing:.06em}
 .wbadge span{font-size:16px}
+.whead{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin-bottom:-6px}.whead .wbadge{align-self:center}.wmascot{width:88px;height:auto;flex:none;animation:wbob 2.4s ease-in-out infinite}@keyframes wbob{50%{transform:translateY(-5px) rotate(-3deg)}}@media (prefers-reduced-motion:reduce){.wmascot{animation:none}}
 .welcome li span{flex:1;min-width:0}.welcome li b{color:var(--fg)}
 .wopt{display:flex!important;gap:8px;align-items:center;font-weight:500!important;color:var(--muted)}
 .wopt input{width:auto!important;margin:0!important}
@@ -353,7 +354,7 @@ footer .wrap{padding-block:18px 8px}
   <div class="demo" role="note"><div class="wrap"><b>Simulação</b><span>Loja de experiência: nenhum valor é cobrado e nenhum produto é entregue.</span><button class="snd" id="themeBtn" aria-label="Mudar para fundo escuro" title="Fundo claro ou escuro">🌙</button><button class="snd" id="sndBtn" aria-label="Som ligado" title="Ligar ou desligar o som">🔊</button></div></div>
   <div class="head"><div class="wrap">
     <button class="logo" data-go="home" aria-label="Shop Comprô, início">
-      <span class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke="#3A2A00" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1.2 11.2a1 1 0 0 1-1 .8H7.2a1 1 0 0 1-1-.8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/><path d="M9.5 13.5c.8 1 1.6 1.5 2.5 1.5s1.7-.5 2.5-1.5"/></svg></span>
+      <span class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke="#3A2A00" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.6 19 9.1v10.4a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 5 19.5V9.1z"/><circle cx="12" cy="7.6" r="1.2"/><path d="M9.6 15.2c.7.8 1.5 1.2 2.4 1.2s1.7-.4 2.4-1.2"/><path d="M10 12h.01M14 12h.01" stroke-width="2.8"/></svg></span>
       <span>Shop Comprô</span>
     </button>
     <form class="search" id="searchForm" role="search">
@@ -716,7 +717,7 @@ function home(){
    <div class="rail">${P.filter(p=>p.bf).sort((a,b)=>b.bf-a.bf).map(p=>`<button class="mini" data-open="${p.id}" aria-label="${esc(p.name)}">${ph(p,`<b class="off bfoff num">-${p.bf}%</b>`)}<p class="nm bfnm">${esc(p.name)}</p><div class="pr num">${brl(p.price)} <s>${brl(p.old)}</s></div></button>`).join('')}</div>
    <button class="btn bf-cta" data-cat="bf">Ver todas as ofertas</button></section>`;
   h+=`<section class="banners" aria-label="Destaques">
-   <div class="ban ban-1"><div><h3>Semana do carrinho leve</h3><p>Compre o que quiser. O total cobrado continua R$ 0,00.</p></div><span class="big" aria-hidden="true">🛍️</span></div>
+   <div class="ban ban-1"><div><h3>Semana do carrinho leve</h3><p>Compre o que quiser. O total cobrado continua R$ 0,00.</p></div><span class="big" aria-hidden="true">🏷️</span></div>
    <div class="ban ban-2"><div><h3>Até 55% de desconto</h3><p>Ofertas de mentirinha, alegria de verdade.</p></div><span class="big" aria-hidden="true">🏷️</span></div>
    <div class="ban ban-3"><div><h3>Frete grátis acima de R$ 49,90</h3><p>A entrega também é imaginária, então é sempre rápida.</p></div><span class="big" aria-hidden="true">🚚</span></div>
   </section>
@@ -990,7 +991,7 @@ $('#q').addEventListener('input',e=>{if(!e.target.value){S.q='';if(S.view==='hom
 let TRACKED=false;
 function welcome(){
  $('#layer').innerHTML=`<div class="scrim center"><div class="welcome" role="dialog" aria-modal="true" aria-labelledby="wt" aria-describedby="wd">
-  <div class="wbadge"><span>🛍️</span><b>Shopping de simulação</b></div>
+  <div class="whead"><div class="wbadge"><span>🏷️</span><b>Shopping de simulação</b></div><img class="wmascot" src="img/comprito.png" alt="Comprito, o mascote do Shop Comprô" width="88" height="117"></div>
   <h2 id="wt">Boas-vindas ao Shop Comprô</h2>
   <p id="wd">Aqui é tudo uma brincadeira: um shopping de mentirinha para sentir o prazer de comprar sem gastar nada.</p>
   <ul>
