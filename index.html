@@ -968,7 +968,7 @@ document.addEventListener('click',e=>{
  if(d.gift!==undefined&&!t.classList.contains('open')){openGift(t);return}
  if(d.amode){S.addrMode=d.amode;rerenderAddr();if(d.amode==='form'){const i=$('#a_cep');i&&i.focus()}return}
  if(d.adel!==undefined){S.addr=null;S.addrMode='skip';rerenderAddr();toast('Endereço apagado');return}
- if(d.enter!==undefined){const nc=$('#wnocount');CONSENT=nc&&nc.checked?'no':'yes';closeLayer();sfx.tap();if(SITE&&CONSENT==='yes'&&!TRACKED){TRACKED=true;startTracking()}return}
+ if(d.enter!==undefined){const nc=$('#wnocount');CONSENT=nc&&nc.checked?'no':'yes';closeLayer();sfx.tap();return}
 });
 document.addEventListener('error',e=>{const t=e.target;if(t&&t.tagName==='IMG'&&t.closest('.ph'))t.remove()},true);
 let THEME=load('cm_theme','');
@@ -998,9 +998,9 @@ function welcome(){
    <li><i>✓</i><span><b>Nada é cobrado.</b> Não pedimos cartão, Pix, CPF nem senha.</span></li>
    <li><i>✓</i><span><b>Nada é entregue.</b> Os produtos e os pedidos são fictícios.</span></li>
    <li><i>✓</i><span><b>Nenhum dado seu é guardado.</b> Não guardamos nome, endereço, e-mail nem telefone.</span></li>
-   ${SITE?'<li><i>✓</i><span><b>Só contamos o tráfego.</b> Visitas, buscas e compras simuladas entram em números gerais e anônimos, com a cidade aproximada.</span></li>':'<li><i>✓</i><span><b>Nada é enviado.</b> Carrinho e pedidos ficam só neste navegador.</span></li>'}
+   ${SITE?'<li><i>✓</i><span><b>Só contamos o tráfego.</b> Cada visita, busca e compra simulada entra em números gerais e anônimos, com a cidade aproximada.</span></li>':'<li><i>✓</i><span><b>Nada é enviado.</b> Carrinho e pedidos ficam só neste navegador. Para compartilhar, use <a href="https://www.shopcompro.com.br/" target="_blank" rel="noopener">www.shopcompro.com.br</a>.</span></li>'}
   </ul>
-  ${SITE?'<label class="wopt" for="wnocount"><input type="checkbox" id="wnocount"> Não contar minha visita</label>':''}
+  ${SITE?'<label class="wopt" for="wnocount"><input type="checkbox" id="wnocount"> Não contar minhas buscas e compras</label>':''}
   <button class="btn btn-main" data-enter>Ciente, quero comprar de mentirinha</button>
   <small class="wsmall">Ao tocar em "Ciente", você confirma que entendeu que nada será cobrado e nada será entregue.${SITE?' <a href="/privacidade.html" target="_blank" rel="noopener">Privacidade</a>':''}</small></div></div>`;
  document.body.style.overflow='hidden';
@@ -1012,11 +1012,11 @@ setInterval(()=>{if(S.view==='orders')render()},30000);
 // SITE: só no site próprio (meta compro-site). Coleta anônima, só com consentimento.
 const SITE=!!document.querySelector('meta[name="compro-site"]');
 let CONSENT=load('cm_consent',null),VID=load('cm_vid','');
-function track(e,data){if(!SITE||CONSENT!=='yes')return Promise.resolve(null);if(!VID){VID=rnd()+rnd()+rnd()+rnd();save('cm_vid',VID)}
+function track(e,data){if(!SITE||(e!=='visit'&&CONSENT==='no'))return Promise.resolve(null);if(!VID){VID=rnd()+rnd()+rnd()+rnd();save('cm_vid',VID)}
  return fetch('/api/t',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({e,vid:VID,...data}),keepalive:true}).then(r=>r.ok?r.json():null).catch(()=>null)}
 // indicação: link com #indicado-CODIGO dá cupom de boas-vindas a quem chega
 let MYREF=load('cm_ref','');if(!MYREF){MYREF=rnd()+rnd();save('cm_ref',MYREF)}
-function refLink(){return (SITE?location.origin+'/':'https://claude.ai/artifact/3mXpzF3R5v7v2bmWZXMLet')+'#indicado-'+MYREF}
+function refLink(){return (SITE?location.origin+'/':'https://www.shopcompro.com.br/')+'#indicado-'+MYREF}
 function copyRef(){const l=refLink();const done=()=>{toast('Link de indicação copiado!');sfx.pop()};const fb=()=>{const i=$('#refIn');if(i){i.focus();i.select()}toast('Selecione e copie o link')};try{navigator.clipboard.writeText(l).then(done,fb)}catch(e){fb()}}
 (function(){const m=/^#indicado-([A-Z0-9]{4,12})$/i.exec(location.hash||'');if(m&&m[1].toUpperCase()!==MYREF&&!load('cm_refby','')){save('cm_refby',m[1].toUpperCase());giveCoupon('AMIGO15-'+rnd(),15,0,'15% por chegar indicado por um amigo','indicacao');setTimeout(()=>toast('🎟️ Você chegou por indicação e ganhou um cupom de 15%!'),1500)}})();
 function startTracking(){
@@ -1029,6 +1029,7 @@ function consentBar(){const d=document.createElement('div');d.className='consent
  d.innerHTML=`<p><b>Sua privacidade</b> Com a sua permissão, o Shop Comprô registra dados anônimos de uso: visitas, buscas, compras simuladas e a cidade aproximada da conexão. Não coletamos nome, endereço, e-mail nem dados de cadastro. <a href="/privacidade.html" target="_blank" rel="noopener">Saiba mais</a></p><div class="cbtns"><button class="btn btn-ghost sm" data-consent="no">Recusar</button><button class="btn btn-main sm" data-consent="yes">Aceitar</button></div>`;
  document.body.appendChild(d);d.addEventListener('click',e=>{const b=e.target.closest('[data-consent]');if(!b)return;CONSENT=b.dataset.consent;save('cm_consent',CONSENT);d.remove();if(CONSENT==='yes')startTracking()})}
 welcome();
+if(SITE&&!TRACKED){TRACKED=true;startTracking()}
 })();
 </script>
 </body></html>
