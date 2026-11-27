@@ -750,7 +750,14 @@ function genFor(q){const t=norm(q).slice(0,40);if(t.length<2)return [];const h=h
   const model=f&&F.t?['','',String.fromCharCode(65+hh%6)+(2+hh%9),String(10+hh%80),['Lite','Max','Neo','Go','Air','One'][hh%6]][hh%5]:'';
   const base=F.p*(0.85+(h%30)/100)*cfg[1];const price=ends9(base);const off=OFFS[hh%OFFS.length];
   const name=F.t||!f?[tp,brand,model,cfg[0]].filter(Boolean).join(' '):cfg[0]+' '+brand;
-  return {id:900000+((h+i*7919)%90000),name,cat:F.cat,price,old:ends9(price/(1-off/100)),e:F.e,h:hh%360,rate:Math.round((4.3+(hh>>>3)%7/10)*10)/10,sold:40+((hh>>>5)%14000),tag:i===0?'Achado':'',gen:true,v2:true,img:cfg[3]||F.i[(h+i)%F.i.length],brand,spec:cfg[2],vars:F.v}})}
+  return {id:900000+((h+i*7919)%90000),name,cat:F.cat,price,old:ends9(price/(1-off/100)),e:F.e,h:hh%360,rate:Math.round((4.3+(hh>>>3)%7/10)*10)/10,sold:40+((hh>>>5)%14000),tag:i===0?'Achado':'',gen:true,v2:true,gp:!f,q:t,img:cfg[3]||F.i[(h+i)%F.i.length],brand,spec:cfg[2],vars:F.v}})}
+// busca sem produto no catálogo: no site, troca a foto genérica por fotos reais do termo buscado
+const PICS_ASKED=new Set();
+function trEn(s){const l=LANG;LANG='en';try{return trWords(s)}catch(e){return s}finally{LANG=l}}
+function fetchPics(items){const g=items.filter(p=>p.gp&&!p.pics);if(!document.querySelector('meta[name="compro-site"]')||!g.length)return;const q=g[0].q;if(!q||PICS_ASKED.has(q))return;PICS_ASKED.add(q);
+ fetch('/api/foto?q='+encodeURIComponent(q)+'&en='+encodeURIComponent(trEn(q))).then(r=>r.ok?r.json():null).then(d=>{const pics=(d&&d.pics)||[];if(!pics.length)return;
+  P.filter(p=>p.gp&&p.q===q).forEach((p,i)=>{const k=i%pics.length;p.img=pics[k];p.pics=pics.slice(k).concat(pics.slice(0,k))});save('cm_gen',GEN);
+  if(S.view==='home'&&S.q&&norm(S.q).slice(0,40)===q)render()}).catch(()=>{})}
 function addGen(items){items.forEach(p=>{if(!P.some(x=>x.id===p.id)){P.push(p);GEN.push(p)}});GEN=GEN.slice(-60);save('cm_gen',GEN)}
 GEN.forEach(p=>{if(!P.some(x=>x.id===p.id))P.push(p)});
 S.cart=S.cart.filter(c=>P.some(p=>p.id===c.id));
@@ -759,7 +766,7 @@ function list(){let l=P.filter(p=>!p.gen);if(S.cat==='alta')l=l.filter(p=>p.hot)
  if(S.q){const t=norm(S.q),words=t.split(/\s+/).filter(w=>w.length>1);const f=famFor(t);const txt=p=>norm(p.name+' '+(p.brand||''));
   let r=l.filter(p=>txt(p).includes(t)||(f&&famFor(p.name)===f));
   if(!r.length&&words.length)r=l.filter(p=>words.every(w=>txt(p).includes(w)));
-  if(r.length<4){const g=genFor(S.q);addGen(g);const gg=g.map(x=>byId(x.id)).filter(Boolean);r=r.concat(gg.filter(p=>norm(p.name).includes(t)),gg.filter(p=>!norm(p.name).includes(t)))}
+  if(r.length<4){const g=genFor(S.q);addGen(g);const gg=g.map(x=>byId(x.id)).filter(Boolean);fetchPics(gg);r=r.concat(gg.filter(p=>norm(p.name).includes(t)),gg.filter(p=>!norm(p.name).includes(t)))}
   l=r}
  return l}
 // variações, ficha técnica e loja de cada produto
@@ -787,7 +794,8 @@ function setSheetImg(){const imgs=document.querySelectorAll('.sheet img[data-mai
 function gslides(p,I){const main=p.img||'img/'+p.id+'.jpg';const S2=[{src:sheet.img,m:1}];const used=new Set([sheet.img]);
  I.V.forEach(g=>g.o.forEach(o=>{if(o.i&&!o.rc&&!used.has(o.i)){used.add(o.i);S2.push({src:o.i,lbl:o.n})}}));
  S2.push({src:sheet.img,m:1,z:'45% 45%',k:1.8,lbl:'Detalhe'});S2.push({src:sheet.img,m:1,z:'25% 70%',k:2.2,lbl:'Detalhe'});
- const pool=(I.fam?I.fam.i:[]).concat(CAT_PICS[p.cat]||[]);for(const x of pool){if(S2.length>=8)break;if(!used.has(x)){used.add(x);S2.push({src:x,lbl:'Ambiente'})}}
+ if(p.pics)p.pics.forEach(x=>{if(!used.has(x)&&S2.length<8){used.add(x);S2.push({src:x})}});
+ const pool=p.pics?[]:(I.fam?I.fam.i:[]).concat(CAT_PICS[p.cat]||[]);for(const x of pool){if(S2.length>=8)break;if(!used.has(x)){used.add(x);S2.push({src:x,lbl:'Ambiente'})}}
  if(S2.length<6)S2.push({src:sheet.img,m:1,z:'75% 30%',k:1.9,lbl:'Detalhe'});if(S2.length<6)S2.push({src:sheet.img,m:1,z:'60% 85%',k:2.4,lbl:'Detalhe'});
  return S2.slice(0,10)}
 const CAT_PICS={moda:['img/v/cm1.jpg','img/v/ca5.jpg','img/2.jpg'],beleza:['img/v2/be12.jpg','img/v2/be10.jpg','img/7.jpg'],casa:['img/v2/ca9.jpg','img/v2/ca11.jpg','img/v2/ca6.jpg'],eletro:['img/v/nb3.jpg','img/v/fn2.jpg','img/23.jpg'],esporte:['img/v2/es7.jpg','img/v2/es5.jpg','img/25.jpg'],pets:['img/v2/pe1.jpg','img/v2/pe8.jpg','img/v2/pe19.jpg'],brinq:['img/v2/br4.jpg','img/v2/br10.jpg','img/33.jpg'],mercado:['img/v2/me1.jpg','img/v2/me8.jpg','img/37.jpg'],acess:['img/v2/ac3.jpg','img/v2/ac6.jpg','img/42.jpg']};
