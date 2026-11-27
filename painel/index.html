@@ -25,7 +25,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--sun);outline-of
 .login input{border:1px solid var(--line);background:var(--surface-2);color:var(--fg);border-radius:10px;padding:12px;font:inherit}
 .err{color:var(--hot);font-weight:600;font-size:14px;margin:0}
 .kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:14px}
-@media(min-width:800px){.kpis{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media(min-width:800px){.kpis{grid-template-columns:repeat(7,minmax(0,1fr))}}
 .kpi{background:var(--surface);border-radius:14px;padding:12px 14px}
 .kpi small{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;font-weight:600}
 .kpi b{display:block;font-family:var(--f-display);font-size:26px;font-variant-numeric:tabular-nums}
@@ -78,6 +78,7 @@ function chart(series){
  ${s.orders?`<circle cx="${x+bw/2}" cy="${y(s.orders)}" r="3.5" fill="var(--hot)"><title>${s.d}: ${s.orders} compras</title></circle>`:''}
  ${(series.length-1-i)%2===0||series.length<10?`<text x="${x+bw/2}" y="${H-10}" text-anchor="middle" font-size="10" fill="var(--muted)">${s.d.slice(8)}/${s.d.slice(5,7)}</text>`:''}`}).join('');
  return `<div class="legend"><span><i style="background:var(--brand)"></i>Acessos</span><span><i style="background:var(--sun)"></i>Visitantes únicos</span><span><i style="background:var(--hot);border-radius:50%"></i>Compras</span></div><div class="chart"><svg viewBox="0 0 ${W} ${H}" width="100%" style="min-width:520px" role="img" aria-label="Acessos dos últimos 14 dias">${g}${bars}</svg></div>`}
+function dur(s){s=Math.round(Number(s)||0);if(!s)return '–';const m=Math.floor(s/60),r=s%60;return m?m+' min'+(r?' '+r+' s':''):r+' s'}
 function dash(d){
  const t=d.totals,last=d.series[d.series.length-1]||{};
  app.innerHTML=`<header><h1>Painel Shop Comprô<small>Atualizado ${new Date(d.generatedAt).toLocaleString('pt-BR')} · dados anônimos</small></h1><div style="display:flex;gap:8px"><button class="btn btn-ghost" id="rf">Atualizar</button><button class="btn btn-ghost" id="lo">Sair</button></div></header>
@@ -86,6 +87,7 @@ function dash(d){
   <div class="kpi"><small>Únicos hoje</small><b>${n(last.uniq)}</b><span>${n(t.uniq)} no total</span></div>
   <div class="kpi"><small>Compras hoje</small><b>${n(last.orders)}</b><span>${n(t.orders)} no total</span></div>
   <div class="kpi"><small>Buscas hoje</small><b>${n(last.searches)}</b><span>últimos 14 dias: ${n(d.series.reduce((a,s)=>a+s.searches,0))}</span></div>
+  <div class="kpi"><small>Tempo médio hoje</small><b>${dur(last.avgTime)}</b><span>geral: ${dur(t.avgTime)} por visita</span></div>
   <div class="kpi"><small>Valor simulado</small><b style="font-size:20px">${brl(t.revenue)}</b><span>nada foi cobrado</span></div>
   <div class="kpi"><small>Conversão</small><b>${t.uniq?Math.round(t.orders/t.uniq*100):0}%</b><span>compras por visitante</span></div>
  </section>

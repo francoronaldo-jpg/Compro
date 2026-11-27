@@ -11,12 +11,15 @@ module.exports = async (req, res) => {
       ['ZREVRANGE', 'c:cities', 0, 14, 'WITHSCORES'], ['ZREVRANGE', 'c:cities:uniq', 0, 14, 'WITHSCORES'],
       ['ZREVRANGE', 'c:searches', 0, 19, 'WITHSCORES'], ['ZREVRANGE', 'c:products', 0, 19, 'WITHSCORES'],
       ['ZREVRANGE', 'c:refs', 0, 9, 'WITHSCORES'], ['LRANGE', 'c:recent', 0, 29],
+      ['GET', 'c:time:sum'], ['GET', 'c:time:n'],
     ];
-    for (const d of days) cmds.push(['GET', 'c:visits:' + d], ['SCARD', 'c:uniq:' + d], ['GET', 'c:orders:' + d], ['GET', 'c:searches:n:' + d]);
+    for (const d of days) cmds.push(['GET', 'c:visits:' + d], ['SCARD', 'c:uniq:' + d], ['GET', 'c:orders:' + d], ['GET', 'c:searches:n:' + d], ['GET', 'c:time:sum:' + d], ['GET', 'c:time:n:' + d]);
     const r = await redis(cmds);
-    const series = days.map((d, i) => ({ d, visits: Number(r[10 + i * 4]) || 0, uniq: Number(r[11 + i * 4]) || 0, orders: Number(r[12 + i * 4]) || 0, searches: Number(r[13 + i * 4]) || 0 }));
+    const B = 12, W = 6, num = (x) => Number(x) || 0;
+    const series = days.map((d, i) => { const o = B + i * W; const ts = num(r[o + 4]), tn = num(r[o + 5]); return { d, visits: num(r[o]), uniq: num(r[o + 1]), orders: num(r[o + 2]), searches: num(r[o + 3]), avgTime: tn ? Math.round(ts / tn) : 0 }; });
+    const tSum = num(r[10]), tN = num(r[11]);
     return res.status(200).json({
-      totals: { visits: Number(r[0]) || 0, uniq: Number(r[1]) || 0, orders: Number(r[2]) || 0, revenue: Number(r[3]) || 0 },
+      totals: { visits: Number(r[0]) || 0, uniq: Number(r[1]) || 0, orders: Number(r[2]) || 0, revenue: Number(r[3]) || 0, avgTime: tN ? Math.round(tSum / tN) : 0, timedVisits: tN },
       cities: pairs(r[4]), citiesUniq: pairs(r[5]), searches: pairs(r[6]), products: pairs(r[7]), refs: pairs(r[8]),
       recent: (r[9] || []).map((x) => { try { return JSON.parse(x); } catch { return null; } }).filter(Boolean),
       series, generatedAt: Date.now(),

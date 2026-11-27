@@ -1,4 +1,4 @@
-// Recebe eventos anônimos do app: visita, busca e compra simulada.
+// Recebe eventos anônimos do app: visita, busca, compra simulada e tempo de navegação.
 // Não recebe nem guarda nome, endereço, e-mail, IP ou dados de cadastro.
 const { redis, today, cityOf, clean, body } = require('./_lib');
 
@@ -10,7 +10,7 @@ module.exports = async (req, res) => {
     const b = await body(req);
     const e = clean(b.e, 10);
     const vid = clean(b.vid, 40).replace(/[^A-Za-z0-9]/g, '');
-    if (!vid || !['visit', 'search', 'purchase'].includes(e)) return res.status(400).json({ error: 'evento inválido' });
+    if (!vid || !['visit', 'search', 'purchase', 'time'].includes(e)) return res.status(400).json({ error: 'evento inválido' });
     const day = today();
     const city = cityOf(req);
     const now = Date.now();
@@ -37,6 +37,14 @@ module.exports = async (req, res) => {
         out.coupon = { code, pct: 30, label: '30% por ser o visitante nº ' + n };
         out.n = n;
         await redis([['LPUSH', 'c:recent', JSON.stringify({ t: now, e: 'cupom ' + n + 'º visitante', city })], ['LTRIM', 'c:recent', 0, 59]]);
+      }
+    } else if (e === 'time') {
+      // tempo de navegação: segundos ativos com a página aberta (sem identificar ninguém)
+      const sec = Math.round(Math.max(0, Math.min(1800, Number(b.s) || 0)));
+      if (sec > 0) {
+        const cmds = [['INCRBY', 'c:time:sum', sec], ['INCRBY', 'c:time:sum:' + day, sec], ['EXPIRE', 'c:time:sum:' + day, 3456000]];
+        if (b.first) cmds.push(['INCR', 'c:time:n'], ['INCR', 'c:time:n:' + day], ['EXPIRE', 'c:time:n:' + day, 3456000]);
+        await redis(cmds);
       }
     } else if (e === 'search') {
       const q = clean(b.q, 40).toLowerCase();
