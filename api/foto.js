@@ -12,6 +12,16 @@ async function getJson(url) {
   return r.json();
 }
 
+// imagem principal do artigo da Wikipédia (ótima para objetos: "alicate", "violino"...)
+async function wikipedia(lang, term) {
+  try {
+    const t = term.charAt(0).toUpperCase() + term.slice(1);
+    const d = await getJson('https://' + lang + '.wikipedia.org/w/api.php?action=query&format=json&redirects=1&prop=pageimages&piprop=thumbnail&pithumbsize=480&titles=' + encodeURIComponent(t));
+    const pages = Object.values((d && d.query && d.query.pages) || {});
+    return pages.map((p) => p.thumbnail && p.thumbnail.source).filter((u) => u && !/\.svg/i.test(u) && !BAD.test(u));
+  } catch { return []; }
+}
+
 async function openverse(term) {
   try {
     const d = await getJson('https://api.openverse.org/v1/images/?page_size=16&mature=false&category=photograph&q=' + encodeURIComponent(term));
@@ -38,14 +48,18 @@ module.exports = async (req, res) => {
   const key = 'c:foto:' + q;
   try {
     const [c] = await redis([['GET', key]]);
-    if (c) { res.setHeader('Cache-Control', 'public, max-age=86400'); return res.status(200).json({ pics: JSON.parse(c) }); }
+    if (c && req.query.debug !== '1') { res.setHeader('Cache-Control', 'public, max-age=86400'); return res.status(200).json({ pics: JSON.parse(c) }); }
   } catch {}
   const terms = [...new Set([en, q].filter(Boolean))];
-  let pics = [];
-  for (const t of terms) { pics = pics.concat(await openverse(t)); if (pics.length >= 4) break; }
-  if (pics.length < 4) for (const t of terms) { pics = pics.concat(await commons(t)); if (pics.length >= 4) break; }
+  const debug = req.query.debug === '1' ? {} : null;
+  const runs = await Promise.all([
+    wikipedia('pt', q), en && en !== q ? wikipedia('en', en) : Promise.resolve([]),
+    ...terms.map((t) => openverse(t)), ...terms.map((t) => commons(t)),
+  ]);
+  if (debug) { debug.wikiPt = runs[0].length; debug.wikiEn = runs[1].length; debug.openverse = runs.slice(2, 2 + terms.length).map((x) => x.length); debug.commons = runs.slice(2 + terms.length).map((x) => x.length); }
+  let pics = [].concat(...runs);
   pics = [...new Set(pics)].slice(0, 8);
   if (pics.length) { try { await redis([['SET', key, JSON.stringify(pics), 'EX', 2592000]]); } catch {} }
   res.setHeader('Cache-Control', pics.length ? 'public, max-age=86400' : 'no-store');
-  return res.status(200).json({ pics });
+  return res.status(200).json(debug ? { pics, debug } : { pics });
 };
